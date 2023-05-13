@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">BibliAPP</string>
+    <string name="MainStart">Bienvenido a BibliAPP</string>
+    <string name="MainUsuario">Usuario</string>
+    <string name="MainIntroduccionUsuario">Introduce e-mail</string>
+    <string name="MainNuevoUsuario">Crear suario</string>
+    <string name="MainContrasenya">Contraseña</string>
+    <string name="MainBotonIniciarSesion">Iniciar Sesion</string>
+    <string name="MainBotonCrearUsuario">Crear nuevo usuario</string>
+</resources>
