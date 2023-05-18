@@ -24,6 +24,17 @@ public class Usuario {
     public Usuario(String username, String contrasenya) {
         this.username = username;
         this.contrasenya = contrasenya;
+        this.f_nacimiento = new Date();
+        this.creado = new Date();
+    }
+
+    public Usuario(String mail, String nombre, String apellido, String contrasenya) {
+        this.id = 0;
+        this.username = nombre;
+        this.mail = mail;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.contrasenya = contrasenya;
     }
 
     public int getId() {

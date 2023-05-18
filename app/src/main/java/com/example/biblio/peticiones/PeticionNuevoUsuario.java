@@ -3,26 +3,22 @@ package com.example.biblio.peticiones;
 import android.util.JsonReader;
 import android.util.Log;
 
-import com.example.biblio.clases.Libro;
 import com.example.biblio.clases.Usuario;
 
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Date;
 
-public class PeticionInicioSesion extends Thread{
+public class PeticionNuevoUsuario extends Thread{
 
     Usuario usuario;
 
-    public PeticionInicioSesion(Usuario usuario){
+    public PeticionNuevoUsuario(Usuario usuario){
         this.usuario = usuario;
     }
 
@@ -31,7 +27,7 @@ public class PeticionInicioSesion extends Thread{
         super.run();
         URL url = null;
         try {
-            url = new URL("http://192.168.1.143:8080/BibliotecaAPI/resources/app/inicioSesion");
+            url = new URL("http://192.168.1.143:8080/BibliotecaAPI/resources/app/nuevoUsuario");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("Accept", "application/json");
@@ -57,14 +53,7 @@ public class PeticionInicioSesion extends Thread{
                         usuario.setMail(jr.nextString());
                     }else if(clave.equals("id")){
                         usuario.setId(Integer.parseInt(jr.nextString()));
-                    }else if(clave.equals("apellido")){
-                        usuario.setApellido(jr.nextString());
-                    }else if(clave.equals("f_nacimiento")){
-                        usuario.setF_nacimiento(new Date(jr.nextString()));
-                    }else if(clave.equals("creado")){
-                        usuario.setCreado(new Date(jr.nextString()));
                     }else{
-                        System.out.println(jr.toString());
                         jr.skipValue();
                     }
                 }

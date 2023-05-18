@@ -7,4 +7,10 @@
     <string name="MainContrasenya">Contraseña</string>
     <string name="MainBotonIniciarSesion">Iniciar Sesion</string>
     <string name="MainBotonCrearUsuario">Crear nuevo usuario</string>
+    <string name="NuevoUsuarioNombre">Nombre</string>
+    <string name="NuevoUsuarioApellido">Apellido</string>
+    <string name="NuevoUsuarioEmail">Email</string>
+    <string name="NuevoUsuarioContrasenya">Contraseña</string>
+    <string name="NuevoUsuarioContrasenyaRep">Repite contraseña</string>
+    <string name="NuevoUsuarioBotonNuevo">Crear usuario</string>
 </resources>

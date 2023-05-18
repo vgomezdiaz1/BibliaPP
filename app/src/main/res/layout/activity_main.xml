@@ -91,6 +91,7 @@
         android:id="@+id/button2"
         android:layout_width="235dp"
         android:layout_height="48dp"
+        android:onClick="nuevoUsuario"
         android:text="@string/MainBotonCrearUsuario"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

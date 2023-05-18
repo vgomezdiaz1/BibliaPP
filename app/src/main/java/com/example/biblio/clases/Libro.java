@@ -16,6 +16,20 @@ public class Libro {
 
     private Date creado;
 
+    private String url;
+
+    private boolean en_posesion;
+
+    private boolean deseado;
+
+    private boolean leido;
+
+    private boolean favorito;
+
+    private Autor autor;
+
+    private Tematica tematica;
+
     public Libro() {
     }
 
@@ -74,6 +88,62 @@ public class Libro {
 
     public void setCreado(Date creado) {
         this.creado = creado;
+    }
+
+    public boolean isEn_posesion() {
+        return en_posesion;
+    }
+
+    public void setEn_posesion(boolean en_posesion) {
+        this.en_posesion = en_posesion;
+    }
+
+    public boolean isDeseado() {
+        return deseado;
+    }
+
+    public void setDeseado(boolean deseado) {
+        this.deseado = deseado;
+    }
+
+    public boolean isLeido() {
+        return leido;
+    }
+
+    public void setLeido(boolean leido) {
+        this.leido = leido;
+    }
+
+    public boolean isFavorito() {
+        return favorito;
+    }
+
+    public void setFavorito(boolean favorito) {
+        this.favorito = favorito;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public Autor getAutor() {
+        return autor;
+    }
+
+    public void setAutor(Autor autor) {
+        this.autor = autor;
+    }
+
+    public Tematica getTematica() {
+        return tematica;
+    }
+
+    public void setTematica(Tematica tematica) {
+        this.tematica = tematica;
     }
 
     @Override
