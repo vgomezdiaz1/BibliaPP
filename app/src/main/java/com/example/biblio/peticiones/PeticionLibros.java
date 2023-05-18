@@ -64,9 +64,19 @@ public class PeticionLibros extends Thread{
                     l.setFavorito(jr.nextBoolean());
                     int idTematica = jr.nextInt();
                     String nombreTematica = jr.nextString();
-                    l.setAutor(new Autor(idAutor,nombreAutor));
-                    l.setTematica(new Tematica(idTematica,nombreTematica));
-                    this.libros.add(l);
+                    boolean posibilidad = true;
+                    for (Libro li: libros) {
+                        if(li.getId() == l.getId()){
+                            li.getTematica().add(new Tematica(idTematica,nombreTematica));
+                            posibilidad = false;
+                            break;
+                        }
+                    }
+                    if(posibilidad){
+                        l.setAutor(new Autor(idAutor,nombreAutor));
+                        l.getTematica().add(new Tematica(idTematica,nombreTematica));
+                        this.libros.add(l);
+                    }
                     jr.endArray();
                 }
                 jr.endArray();

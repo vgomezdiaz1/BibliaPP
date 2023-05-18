@@ -37,6 +37,15 @@ public class Usuario {
         this.contrasenya = contrasenya;
     }
 
+    public Usuario(int id, String username, String mail, String nombre, String apellido, String contrasenya) {
+        this.id = id;
+        this.username = username;
+        this.mail = mail;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.contrasenya = contrasenya;
+    }
+
     public int getId() {
         return id;
     }

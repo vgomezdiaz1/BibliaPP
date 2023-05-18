@@ -1,6 +1,8 @@
 package com.example.biblio;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -44,15 +46,14 @@ public class MainActivity extends AppCompatActivity {
         if(u.getId()== 0 ){
             Toast.makeText(this, "Usuario o contraseña incorrecta", Toast.LENGTH_SHORT).show();
         }else{
-            System.out.println(u.toString());
-            ArrayList<Libro> libros = new ArrayList<>();
-            PeticionLibros pl = new PeticionLibros(u,libros);
-            pl.start();
-            try {
-                pl.join();
-            }catch(Exception e){
-                e.printStackTrace();
-            }
+            Intent i = new Intent(this, ListadoLibrosActivity.class);
+            i.putExtra("id", u.getId());
+            i.putExtra("username", u.getUsername());
+            i.putExtra("nombre", u.getNombre());
+            i.putExtra("mail", u.getMail());
+            i.putExtra("apellido", u.getApellido());
+            i.putExtra("contrasenya", u.getContrasenya());
+            startActivity(i);
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.biblio.clases;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Libro {
@@ -28,7 +29,7 @@ public class Libro {
 
     private Autor autor;
 
-    private Tematica tematica;
+    private ArrayList<Tematica> tematica = new ArrayList<>();
 
     public Libro() {
     }
@@ -138,11 +139,11 @@ public class Libro {
         this.autor = autor;
     }
 
-    public Tematica getTematica() {
+    public ArrayList<Tematica> getTematica() {
         return tematica;
     }
 
-    public void setTematica(Tematica tematica) {
+    public void setTematica(ArrayList<Tematica> tematica) {
         this.tematica = tematica;
     }
 
