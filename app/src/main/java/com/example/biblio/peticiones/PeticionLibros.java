@@ -14,7 +14,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class PeticionLibros extends Thread{
 
@@ -46,7 +45,6 @@ public class PeticionLibros extends Thread{
                 InputStreamReader isr = new InputStreamReader(is, "UTF-8");
                 JsonReader jr = new JsonReader(isr);
                 jr.beginArray();
-                int n = 0;
                 while(jr.hasNext()){
                     Libro l = new Libro();
                     jr.beginArray();

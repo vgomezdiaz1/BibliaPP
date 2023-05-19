@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,6 +30,52 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
+        myDB.execSQL(
+                "CREATE TABLE IF NOT EXISTS usuario " +
+                        "(id Integer PRIMARY KEY, " +
+                        "username VARCHAR(50), " +
+                        "nombre VARCHAR(50), " +
+                        "apellido varchar(50), " +
+                        "email varchar(100), " +
+                        "contrasenya varchar(30));"
+        );
+        myDB.execSQL(
+                "CREATE TABLE IF NOT EXISTS autor " +
+                        "(id Integer PRIMARY KEY, " +
+                        "nombre VARCHAR(50) " +
+                        ");"
+        );
+        myDB.execSQL(
+                "CREATE TABLE IF NOT EXISTS libro " +
+                        "(id Integer PRIMARY KEY," +
+                        "isbn VARCHAR(20), " +
+                        "titulo VARCHAR(50), " +
+                        "sinopsis TEXT, " +
+                        "hojas int, " +
+                        "url varchar(100), " +
+                        "en_posesion BOOLEAN, " +
+                        "deseado BOOLEAN, " +
+                        "leido BOOLEAN, " +
+                        "favorito BOOLEAN," +
+                        "id_autor Integer, " +
+                        "constraint fk_libro_autor foreign key (id_autor) references autor(id));"
+        );
+        myDB.execSQL(
+                "CREATE TABLE IF NOT EXISTS tematica " +
+                        "(id Integer PRIMARY KEY," +
+                        "nombre VARCHAR(20) " +
+                        ");"
+        );
+        myDB.execSQL(
+                "CREATE TABLE IF NOT EXISTS libro_tematica " +
+                        "(id_libro Integer ," +
+                        "id_tematica Integer," +
+                        "constraint fk_libro_tematica_libro foreign key (id_libro) references libro(id)," +
+                        "constraint fk_libro_tematica_tematica foreign key (id_tematica) references tematica(id) " +
+                        ");"
+        );
     }
 
     public void inciarSesion(View v){

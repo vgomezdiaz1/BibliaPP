@@ -13,19 +13,13 @@ public class Usuario {
 
     private String apellido;
 
-    private Date f_nacimiento;
-
     private String contrasenya;
-
-    private Date creado;
 
     public Usuario() {
     }
     public Usuario(String username, String contrasenya) {
         this.username = username;
         this.contrasenya = contrasenya;
-        this.f_nacimiento = new Date();
-        this.creado = new Date();
     }
 
     public Usuario(String mail, String nombre, String apellido, String contrasenya) {
@@ -86,28 +80,12 @@ public class Usuario {
         this.apellido = apellido;
     }
 
-    public Date getF_nacimiento() {
-        return f_nacimiento;
-    }
-
-    public void setF_nacimiento(Date f_nacimiento) {
-        this.f_nacimiento = f_nacimiento;
-    }
-
     public String getContrasenya() {
         return contrasenya;
     }
 
     public void setContrasenya(String contrasenya) {
         this.contrasenya = contrasenya;
-    }
-
-    public Date getCreado() {
-        return creado;
-    }
-
-    public void setCreado(Date creado) {
-        this.creado = creado;
     }
 
     @Override

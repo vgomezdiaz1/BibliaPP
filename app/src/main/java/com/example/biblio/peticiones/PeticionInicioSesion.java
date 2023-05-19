@@ -59,10 +59,6 @@ public class PeticionInicioSesion extends Thread{
                         usuario.setId(Integer.parseInt(jr.nextString()));
                     }else if(clave.equals("apellido")){
                         usuario.setApellido(jr.nextString());
-                    }else if(clave.equals("f_nacimiento")){
-                        usuario.setF_nacimiento(new Date(jr.nextString()));
-                    }else if(clave.equals("creado")){
-                        usuario.setCreado(new Date(jr.nextString()));
                     }else{
                         System.out.println(jr.toString());
                         jr.skipValue();
