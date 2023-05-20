@@ -175,4 +175,12 @@ public class Libro {
                 ", creado=" + creado +
                 '}';
     }
+
+    public String toStringTematicas(){
+        String n = "";
+        for (Tematica t: this.getTematica()) {
+            n += t.getNombre() + "\n";
+        }
+        return n;
+    }
 }

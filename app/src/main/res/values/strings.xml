@@ -14,4 +14,6 @@
     <string name="NuevoUsuarioContrasenya">Contraseña</string>
     <string name="NuevoUsuarioContrasenyaRep">Repite contraseña</string>
     <string name="NuevoUsuarioBotonNuevo">Crear usuario</string>
+    <string name="ListadoLibrosNuevoLibro">Nuevo libro</string>
+    <string name="ListadoLibrosCerrarSesion">Cerrar sesión</string>
 </resources>

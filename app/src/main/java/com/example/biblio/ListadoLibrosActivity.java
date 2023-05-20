@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.View;
 
 import com.example.biblio.clases.Autor;
 import com.example.biblio.clases.Libro;
@@ -34,6 +35,8 @@ public class ListadoLibrosActivity extends AppCompatActivity {
                 , i.getStringExtra("nombre"),i.getStringExtra("apellido"),i.getStringExtra("contrasenya"));
         if(i.getBooleanExtra("iniciado",false)){
             SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
+            SQLiteDatabase myDB1 = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
+            Cursor cursor1 = null;
             Cursor cursor = myDB.rawQuery("select * from autor",null);
             while(cursor.moveToNext()){
                 autores.add(new Autor(cursor.getInt(0),cursor.getString(1)));
@@ -65,8 +68,8 @@ public class ListadoLibrosActivity extends AppCompatActivity {
                     }
                 }
                 ArrayList<Tematica> temas = new ArrayList<>();
-                SQLiteDatabase myDB1 = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
-                Cursor cursor1 = myDB1.rawQuery("select t.id, t.nombre from tematica t " +
+
+                cursor1= myDB1.rawQuery("select t.id, t.nombre from tematica t " +
                         "inner join libro_tematica lt on t.id = lt.id_tematica " +
                         "where lt.id_libro =  " + id,null);
                 while(cursor1.moveToNext()){
@@ -74,6 +77,9 @@ public class ListadoLibrosActivity extends AppCompatActivity {
                 }
                 libros.add(new Libro(id,isbn,titulo,sinopsis,hojas,url,en_posesion,deseado,leido,favorito,autor,temas));
             }
+            cursor.close();
+            myDB.close();
+            myDB1.close();
         }else{
             PeticionLibros pl = new PeticionLibros(u,libros, this.getResources());
             pl.start();
@@ -164,5 +170,15 @@ public class ListadoLibrosActivity extends AppCompatActivity {
             }
         }
         myDB.close();
+    }
+
+    public void cerrarSesion(View v){
+        SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
+        myDB.delete("libro_tematica","",null);
+        myDB.delete("libro","",null);
+        myDB.delete("tematica","",null);
+        myDB.delete("usuario","",null);
+        Intent i = new Intent(this, MainActivity.class);
+        startActivity(i);
     }
 }

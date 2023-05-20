@@ -25,14 +25,14 @@ public class MiAdaptador extends RecyclerView.Adapter<MiAdaptador.MyViewHolder> 
         ImageView img;
         TextView txtNombre;
         TextView txtAutor;
-        TextView txtSinopsis;
+        TextView txtTematicas;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             img = itemView.findViewById(R.id.imagePortada);
             txtNombre = itemView.findViewById(R.id.textNombreLibro);
             txtAutor = itemView.findViewById(R.id.textAutor);
-            txtSinopsis = itemView.findViewById(R.id.textSinopsis);
+            txtTematicas = itemView.findViewById(R.id.textSinopsis);
         }
     }
 
@@ -54,7 +54,7 @@ public class MiAdaptador extends RecyclerView.Adapter<MiAdaptador.MyViewHolder> 
         u1.execute(libros.get(position).getUrl());
         holder.txtNombre.setText(libros.get(position).getTitulo());
         holder.txtAutor.setText(libros.get(position).getAutor().getNombre());
-        holder.txtSinopsis.setText(libros.get(position).getSinopsis());
+        holder.txtTematicas.setText(libros.get(position).toStringTematicas());
     }
 
     @Override
