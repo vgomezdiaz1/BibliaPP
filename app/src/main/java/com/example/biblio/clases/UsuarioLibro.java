@@ -2,8 +2,8 @@ package com.example.biblio.clases;
 
 public class UsuarioLibro {
 
-    private int id_usuario;
-    private int id_libro;
+    private Usuario usuario;
+    private Libro libro;
     private boolean en_posesion;
     private boolean deseado;
     private boolean leido;
@@ -12,29 +12,29 @@ public class UsuarioLibro {
     public UsuarioLibro() {
     }
 
-    public UsuarioLibro(int id_usuario, int id_libro, boolean en_posesion, boolean deseado, boolean leido, boolean favorito) {
-        this.id_usuario = id_usuario;
-        this.id_libro = id_libro;
+    public UsuarioLibro(Usuario usuario, Libro libro, boolean en_posesion, boolean deseado, boolean leido, boolean favorito) {
+        this.usuario = usuario;
+        this.libro = libro;
         this.en_posesion = en_posesion;
         this.deseado = deseado;
         this.leido = leido;
         this.favorito = favorito;
     }
 
-    public int getId_usuario() {
-        return id_usuario;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setId_usuario(int id_usuario) {
-        this.id_usuario = id_usuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
-    public int getId_libro() {
-        return id_libro;
+    public Libro getLibro() {
+        return libro;
     }
 
-    public void setId_libro(int id_libro) {
-        this.id_libro = id_libro;
+    public void setLibro(Libro libro) {
+        this.libro = libro;
     }
 
     public boolean isEn_posesion() {
@@ -71,13 +71,12 @@ public class UsuarioLibro {
 
     @Override
     public String toString() {
-        return "{" +
-                "\"id_usuario\":" + id_usuario + '\"' +
-                ",\"id_libro\":" + id_libro + '\"' +
-                ",\"en_posesion\":" + en_posesion + '\"' +
-                ",\"deseado\":" + deseado + '\"' +
-                ",\"leido\":" + leido + '\"' +
-                ",\"favorito\":" + favorito + '\"' +
-                '}';
+        return "o:" +
+                usuario.getId() +
+                 " r:" + libro.getId() +
+                " n:" + en_posesion +
+                " d:" + deseado +
+                " i:" + leido +
+                " v:" + favorito;
     }
 }

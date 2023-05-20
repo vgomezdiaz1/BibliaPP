@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
                         "titulo VARCHAR(50), " +
                         "sinopsis TEXT, " +
                         "hojas int, " +
+                        "id_portada int, " +
                         "url varchar(100), " +
                         "en_posesion INTEGER DEFAULT 0, " +
                         "deseado INTEGER DEFAULT 0, " +
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
             i.putExtra("contrasenya", u.getContrasenya());
             i.putExtra("iniciado",false);
             startActivity(i);
+            finish();
         }
     }
 

@@ -99,4 +99,12 @@ public class Usuario {
                 ", \"contrasenya\":\"" + contrasenya + '\"' +
                 '}';
     }
+    public String toStringUsuarioLibro() {
+        return  "\"id\":" + id +
+                ", \"username\":\"" + username + '\"' +
+                ", \"mail\":\"" + mail + '\"' +
+                ", \"nombre\":\"" + nombre + '\"' +
+                ", \"apellido\":\"" + apellido + '\"' +
+                ", \"contrasenya\":\"" + contrasenya + '\"';
+    }
 }

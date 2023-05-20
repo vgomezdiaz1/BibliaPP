@@ -1,9 +1,14 @@
 package com.example.biblio;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,7 +16,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.biblio.clases.Autor;
 import com.example.biblio.clases.Libro;
@@ -22,14 +29,16 @@ import com.example.biblio.peticiones.PeticionActualizarLibro;
 
 import java.util.ArrayList;
 
-public class InformacionLibroActivity extends AppCompatActivity {
+public class InformacionLibroActivity extends AppCompatActivity implements LifecycleObserver {
 
     String id = null;
     Usuario usuario = null;
-    CheckBox en_posesion = null;
-    CheckBox deseado = null;
-    CheckBox leido = null;
-    CheckBox favorito = null;
+    Libro libro = null;
+    Switch en_posesion;
+    Switch deseado = null;
+    Switch leido = null;
+    Switch favorito = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,17 +46,17 @@ public class InformacionLibroActivity extends AppCompatActivity {
         Intent i = getIntent();
         id = i.getStringExtra("libro");
         usuario = informacionUsuario();
-        Libro libro = informacionLibro(id);
+        libro = informacionLibro(id);
         TextView textTitulo = findViewById(R.id.textInfoLibroTitulo);
         TextView textAutor = findViewById(R.id.textInfoLibroAutor);
         TextView textHojas = findViewById(R.id.textInfoLibroHojas);
         TextView textTematicas = findViewById(R.id.textInfoLibroTematicas);
         TextView textSinopsis = findViewById(R.id.textInfoLibroSinopsis);
         ImageView foto = findViewById(R.id.imageInformacionLibrosImagen);
-        CheckBox en_posesion = findViewById(R.id.checkBoxen_posesion);
-        CheckBox deseado = findViewById(R.id.checkBoxdeseado);
-        CheckBox leido = findViewById(R.id.checkBoxleido);
-        CheckBox favorito = findViewById(R.id.checkBoxfavorito);
+        this.en_posesion = findViewById(R.id.switchen_posesion);
+        this.deseado = findViewById(R.id.switchdeseado);
+        this.leido = findViewById(R.id.switchLeido);
+        this.favorito = findViewById(R.id.switchfavorito);
         DownloadImageTask u1 = new DownloadImageTask(foto);
         u1.execute(libro.getUrl());
         textTitulo.setText(libro.getTitulo());
@@ -59,6 +68,11 @@ public class InformacionLibroActivity extends AppCompatActivity {
         deseado.setChecked(libro.isDeseado());
         leido.setChecked(libro.isLeido());
         favorito.setChecked(libro.isFavorito());
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
+    public void releaseCamera() {
+        finish();
     }
 
     static boolean trueOrFalse(int n){
@@ -92,12 +106,12 @@ public class InformacionLibroActivity extends AppCompatActivity {
         int id_autor = 0;
         while (cursor.moveToNext()) {
             libro = new Libro(cursor.getInt(0), cursor.getString(1), cursor.getString(2),
-                    cursor.getString(3), cursor.getInt(4), cursor.getString(5));
-            libro.setEn_posesion(trueOrFalse(cursor.getInt(6)));
-            libro.setDeseado(trueOrFalse(cursor.getInt(7)));
-            libro.setLeido(trueOrFalse(cursor.getInt(8)));
-            libro.setFavorito(trueOrFalse(cursor.getInt(9)));
-            id_autor = cursor.getInt(10);
+                    cursor.getString(3), cursor.getInt(4), cursor.getInt(5), cursor.getString(6));
+            libro.setEn_posesion(trueOrFalse(cursor.getInt(7)));
+            libro.setDeseado(trueOrFalse(cursor.getInt(8)));
+            libro.setLeido(trueOrFalse(cursor.getInt(9)));
+            libro.setFavorito(trueOrFalse(cursor.getInt(10)));
+            id_autor = cursor.getInt(11);
         }
         cursor = myDB.rawQuery("select * from autor where id = " + id_autor,null);
         while(cursor.moveToNext()){
@@ -116,10 +130,25 @@ public class InformacionLibroActivity extends AppCompatActivity {
         return libro;
     }
 
-    public void confirmarCambios(View v){
-        UsuarioLibro ul = new UsuarioLibro(Integer.parseInt(this.id), this.usuario.getId(),
-                en_posesion.isChecked(),deseado.isChecked(),leido.isChecked(),favorito.isChecked());
-        PeticionActualizarLibro p1 = new PeticionActualizarLibro(ul);
+    public void confirmarCambios(View v) {
+        UsuarioLibro ul = new UsuarioLibro(this.usuario, this.libro,
+                this.en_posesion.isChecked(), this.deseado.isChecked(),
+                this.leido.isChecked(), this.favorito.isChecked());
+        String completado = "";
+        PeticionActualizarLibro p1 = new PeticionActualizarLibro(ul, completado);
         p1.start();
+        try {
+            p1.join();
+            ContentValues cv = new ContentValues();
+            cv.put("en_posesion", this.en_posesion.isChecked());
+            cv.put("deseado", this.deseado.isChecked());
+            cv.put("leido", this.leido.isChecked());
+            cv.put("favorito", this.favorito.isChecked());
+            SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
+            int c = myDB.update("libro", cv, "id = ? ", new String[]{this.libro.getId() + ""});
+            System.out.println(c);
+        } catch (Exception e) {
+            Toast.makeText(this, "No se ha podido actualizar la informacion", Toast.LENGTH_SHORT).show();
+        }
     }
 }

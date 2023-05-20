@@ -33,14 +33,7 @@ public class PeticionNuevoLibro  extends Thread{
                 Libro l = new Libro();
                 while(jr.hasNext()){
                     String clave = jr.nextName();
-                    if(clave.equals("creado")){
-                        try{
-                            l.setCreado(new Date(jr.nextString()));
-                        }catch(Exception e){
-                            l.setCreado(new Date());
-                            e.printStackTrace();
-                        }
-                    }else if(clave.equals("hojas")){
+                    if(clave.equals("hojas")){
                         l.setHojas(Integer.parseInt(jr.nextString()));
                     }else if(clave.equals("id")){
                         l.setId(Integer.parseInt(jr.nextString()));

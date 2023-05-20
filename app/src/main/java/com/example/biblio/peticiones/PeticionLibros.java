@@ -55,6 +55,7 @@ public class PeticionLibros extends Thread{
                     l.setIsbn(jr.nextString());
                     l.setSinopsis(jr.nextString());
                     l.setTitulo(jr.nextString());
+                    l.setId_portada(jr.nextInt());
                     l.setUrl(jr.nextString());
                     int idAutor = jr.nextInt();
                     String nombreAutor = jr.nextString();

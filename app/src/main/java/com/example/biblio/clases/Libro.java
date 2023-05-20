@@ -15,7 +15,7 @@ public class Libro {
 
     private int hojas;
 
-    private Date creado;
+    private int id_portada;
 
     private String url;
 
@@ -34,16 +34,17 @@ public class Libro {
     public Libro() {
     }
 
-    public Libro(int id, String isbn, String titulo, String sinopsis, int hojas,String url) {
+    public Libro(int id, String isbn, String titulo, String sinopsis, int hojas, int id_portada, String url) {
         this.id = id;
         this.isbn = isbn;
         this.titulo = titulo;
         this.sinopsis = sinopsis;
         this.hojas = hojas;
+        this.id_portada = id_portada;
         this.url = url;
     }
 
-    public Libro(int id, String isbn, String titulo, String sinopsis, int hojas, String url,
+    public Libro(int id, String isbn, String titulo, String sinopsis, int hojas,int id_portada, String url,
                  boolean en_posesion, boolean deseado, boolean leido, boolean favorito,
                  Autor autor, ArrayList<Tematica> tematica) {
         this.id = id;
@@ -51,6 +52,7 @@ public class Libro {
         this.titulo = titulo;
         this.sinopsis = sinopsis;
         this.hojas = hojas;
+        this.id_portada = id_portada;
         this.url = url;
         this.en_posesion = en_posesion;
         this.deseado = deseado;
@@ -99,14 +101,6 @@ public class Libro {
 
     public void setHojas(int hojas) {
         this.hojas = hojas;
-    }
-
-    public Date getCreado() {
-        return creado;
-    }
-
-    public void setCreado(Date creado) {
-        this.creado = creado;
     }
 
     public boolean isEn_posesion() {
@@ -165,16 +159,32 @@ public class Libro {
         this.tematica = tematica;
     }
 
+    public int getId_portada() {
+        return id_portada;
+    }
+
+    public void setId_portada(int id_portada) {
+        this.id_portada = id_portada;
+    }
+
     @Override
     public String toString() {
-        return "Libro{" +
-                "id=" + id +
-                ", isbn='" + isbn + '\'' +
-                ", titulo='" + titulo + '\'' +
-                ", sinopsis='" + sinopsis + '\'' +
-                ", hojas=" + hojas +
-                ", url=" + url +
+        return "{" +
+                "\"id\":" + id +
+                ", \"isbn\":\"" + isbn + '\"' +
+                ", \"titulo\":\"" + titulo + '\"' +
+                ", \"sinopsis\":\"" + sinopsis.replaceAll("\"","") + '\"' +
+                ", \"hojas\":" + hojas +
+                ", \"id_portada\":" + id_portada +
                 '}';
+    }
+    public String toStringUsuarioLibro() {
+        return  ", \"idLibro\":" + id +
+                ", \"isbn\":\"" + isbn + '\"' +
+                ", \"titulo\":\"" + titulo + '\"' +
+                ", \"sinopsis\":\"" + sinopsis.replaceAll("\"","") + '\"' +
+                ", \"hojas\":" + hojas +
+                ", \"id_portada\":" + id_portada;
     }
 
     public String toStringCompleto() {
@@ -183,7 +193,6 @@ public class Libro {
                 ", isbn='" + isbn + '\'' +
                 ", titulo='" + titulo + '\'' +
                 ", hojas=" + hojas +
-                ", creado=" + creado +
                 ", url='" + url + '\'' +
                 ", en_posesion=" + en_posesion +
                 ", deseado=" + deseado +

@@ -41,7 +41,7 @@ public class ListadoLibrosActivity extends AppCompatActivity {
             while(cursor.moveToNext()){
                 autores.add(new Autor(cursor.getInt(0),cursor.getString(1)));
             }
-            cursor = myDB.rawQuery("select l.id, l.isbn, l.titulo, l.sinopsis, l.hojas, l.url," +
+            cursor = myDB.rawQuery("select l.id, l.isbn, l.titulo, l.sinopsis, l.hojas, l.id_portada, l.url," +
                     " l.en_posesion, l.deseado, l.leido, l.favorito, l.id_autor from libro l" ,null);
             while(cursor.moveToNext()){
                 int id = cursor.getInt(0);
@@ -49,12 +49,13 @@ public class ListadoLibrosActivity extends AppCompatActivity {
                 String titulo = cursor.getString(2);
                 String sinopsis = cursor.getString(3);
                 int hojas = cursor.getInt(4);
-                String url = cursor.getString(5);
-                boolean en_posesion = trueOrFalse(cursor.getInt(6));
-                boolean deseado = trueOrFalse(cursor.getInt(7));
-                boolean leido = trueOrFalse(cursor.getInt(8));
-                boolean favorito = trueOrFalse(cursor.getInt(9));
-                int id_autor = cursor.getInt(10);
+                int id_portada = cursor.getInt(5);
+                String url = cursor.getString(6);
+                boolean en_posesion = trueOrFalse(cursor.getInt(7));
+                boolean deseado = trueOrFalse(cursor.getInt(8));
+                boolean leido = trueOrFalse(cursor.getInt(9));
+                boolean favorito = trueOrFalse(cursor.getInt(10));
+                int id_autor = cursor.getInt(11);
                 Autor autor = new Autor();
                 for (Autor a: autores) {
                     if(id_autor == a.getId()){
@@ -70,7 +71,7 @@ public class ListadoLibrosActivity extends AppCompatActivity {
                 while(cursor1.moveToNext()){
                     temas.add(new Tematica(cursor1.getInt(0),cursor1.getString(1)));
                 }
-                Libro l = new Libro(id,isbn,titulo,sinopsis,hojas,url,en_posesion,deseado,leido,favorito,autor,temas);
+                Libro l = new Libro(id,isbn,titulo,sinopsis,hojas,id_portada,url,en_posesion,deseado,leido,favorito,autor,temas);
                 libros.add(l);
             }
             cursor.close();
@@ -115,6 +116,7 @@ public class ListadoLibrosActivity extends AppCompatActivity {
             cv.put("titulo", li.getTitulo());
             cv.put("sinopsis", li.getSinopsis());
             cv.put("hojas", li.getHojas());
+            cv.put("id_portada", li.getId_portada());
             cv.put("url",li.getUrl());
             cv.put("en_posesion", li.isEn_posesion());
             cv.put("deseado", li.isDeseado());

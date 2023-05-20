@@ -41,6 +41,7 @@
                             android:id="@+id/textInfoLibroTitulo"
                             android:layout_width="match_parent"
                             android:layout_height="46dp"
+                            android:paddingHorizontal="10dp"
                             android:text="TextView"
                             android:textSize="20sp"
                             android:textStyle="bold" />
@@ -50,18 +51,21 @@
                             android:layout_width="match_parent"
                             android:layout_height="23dp"
                             android:layout_marginTop="2dp"
+                            android:paddingHorizontal="10dp"
                             android:text="TextView" />
 
                         <TextView
                             android:id="@+id/textInfoLibroHojas"
                             android:layout_width="match_parent"
                             android:layout_height="23dp"
+                            android:paddingHorizontal="10dp"
                             android:text="TextView" />
 
                         <TextView
                             android:id="@+id/textInfoLibroTematicas"
                             android:layout_width="match_parent"
                             android:layout_height="97dp"
+                            android:paddingHorizontal="10dp"
                             android:text="TextView" />
                     </LinearLayout>
                 </LinearLayout>
@@ -80,20 +84,23 @@
 
                     <LinearLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center|center_horizontal"
+                        android:gravity="center|center_horizontal"
                         android:orientation="vertical">
 
-                        <CheckBox
-                            android:id="@+id/checkBoxleido"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                        <Switch
+                            android:id="@+id/switchLeido"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:gravity="center|clip_vertical"
                             android:text="@string/InformacionLibrosleido" />
 
-                        <CheckBox
-                            android:id="@+id/checkBoxen_posesion"
-                            android:layout_width="wrap_content"
+                        <Switch
+                            android:id="@+id/switchen_posesion"
+                            android:layout_width="200dp"
                             android:layout_height="48dp"
-                            android:layout_marginBottom="4dp"
+                            android:gravity="center|clip_vertical"
                             android:text="@string/InformacionLibrosen_posesion" />
 
                     </LinearLayout>
@@ -101,29 +108,33 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center|center_horizontal"
+                        android:gravity="center|center_horizontal"
                         android:orientation="vertical">
 
-                        <CheckBox
-                            android:id="@+id/checkBoxfavorito"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="52dp"
+                        <Switch
+                            android:id="@+id/switchdeseado"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:gravity="center|clip_vertical"
+                            android:text="@string/InformacionLibrosdeseado" />
+
+                        <Switch
+                            android:id="@+id/switchfavorito"
+                            android:layout_width="200dp"
+                            android:layout_height="48dp"
+                            android:gravity="center|clip_vertical"
                             android:text="@string/InformacionLibrosfavorito" />
 
-                        <CheckBox
-                            android:id="@+id/checkBoxdeseado"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="52dp"
-                            android:text="@string/InformacionLibrosdeseado" />
                     </LinearLayout>
 
                 </LinearLayout>
 
                 <Button
                     android:id="@+id/button"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:onClick="confirmarCambios"
                     android:text="@string/InformacionLibrosBotonGuardarCambios" />
 
             </LinearLayout>
