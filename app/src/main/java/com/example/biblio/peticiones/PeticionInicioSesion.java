@@ -3,6 +3,7 @@ package com.example.biblio.peticiones;
 import android.util.JsonReader;
 import android.util.Log;
 
+import com.example.biblio.R;
 import com.example.biblio.clases.Libro;
 import com.example.biblio.clases.Usuario;
 
@@ -31,7 +32,7 @@ public class PeticionInicioSesion extends Thread{
         super.run();
         URL url = null;
         try {
-            url = new URL("http://192.168.1.143:8080/BibliotecaAPI/resources/app/inicioSesion");
+            url = new URL("http://192.168.1.148:8080/BibliotecaAPI/resources/app/inicioSesion");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestProperty("Content-Type", "application/json");
             conn.setRequestProperty("Accept", "application/json");

@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
@@ -30,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
         myDB.execSQL(
                 "CREATE TABLE IF NOT EXISTS usuario " +
@@ -55,10 +56,10 @@ public class MainActivity extends AppCompatActivity {
                         "sinopsis TEXT, " +
                         "hojas int, " +
                         "url varchar(100), " +
-                        "en_posesion BOOLEAN, " +
-                        "deseado BOOLEAN, " +
-                        "leido BOOLEAN, " +
-                        "favorito BOOLEAN," +
+                        "en_posesion INTEGER DEFAULT 0, " +
+                        "deseado INTEGER DEFAULT 0, " +
+                        "leido INTEGER DEFAULT 0, " +
+                        "favorito INTEGER DEFAULT 0," +
                         "id_autor Integer, " +
                         "constraint fk_libro_autor foreign key (id_autor) references autor(id));"
         );
@@ -76,6 +77,28 @@ public class MainActivity extends AppCompatActivity {
                         "constraint fk_libro_tematica_tematica foreign key (id_tematica) references tematica(id) " +
                         ");"
         );
+        Usuario usuario = new Usuario();
+        SQLiteDatabase myDB1 = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
+        Cursor cursor = myDB1.rawQuery("select * from usuario",null);
+        while(cursor.moveToNext()){
+            usuario.setId(cursor.getInt(0));
+            usuario.setUsername(cursor.getString(1));
+            usuario.setNombre(cursor.getString(2));
+            usuario.setMail(cursor.getString(3));
+            usuario.setApellido(cursor.getString(4));
+            usuario.setContrasenya(cursor.getString(5));
+        }
+        if(usuario.getUsername()!= null){
+            Intent i = new Intent(this, ListadoLibrosActivity.class);
+            i.putExtra("id", usuario.getId());
+            i.putExtra("username", usuario.getUsername());
+            i.putExtra("nombre", usuario.getNombre());
+            i.putExtra("mail", usuario.getMail());
+            i.putExtra("apellido", usuario.getApellido());
+            i.putExtra("contrasenya", usuario.getContrasenya());
+            i.putExtra("iniciado",true);
+            startActivity(i);
+        }
     }
 
     public void inciarSesion(View v){
@@ -93,6 +116,7 @@ public class MainActivity extends AppCompatActivity {
         if(u.getId()== 0 ){
             Toast.makeText(this, "Usuario o contraseña incorrecta", Toast.LENGTH_SHORT).show();
         }else{
+            guardarUsuario(u);
             Intent i = new Intent(this, ListadoLibrosActivity.class);
             i.putExtra("id", u.getId());
             i.putExtra("username", u.getUsername());
@@ -100,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
             i.putExtra("mail", u.getMail());
             i.putExtra("apellido", u.getApellido());
             i.putExtra("contrasenya", u.getContrasenya());
+            i.putExtra("iniciado",false);
             startActivity(i);
         }
     }
@@ -107,5 +132,17 @@ public class MainActivity extends AppCompatActivity {
     public void nuevoUsuario(View v){
         Intent i = new Intent(this, NuevoUsuarioActivity.class);
         startActivity(i);
+    }
+
+    public void guardarUsuario(Usuario u){
+        ContentValues cv = new ContentValues();
+        cv.put("id", u.getId());
+        cv.put("username",u.getUsername());
+        cv.put("email", u.getMail());
+        cv.put("nombre", u.getNombre());
+        cv.put("apellido", u.getApellido());
+        cv.put("contrasenya",u.getContrasenya());
+        SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
+        myDB.insert("usuario",null, cv);
     }
 }

@@ -3,6 +3,7 @@ package com.example.biblio.peticiones;
 import android.util.JsonReader;
 import android.util.Log;
 
+import com.example.biblio.R;
 import com.example.biblio.clases.Libro;
 
 import java.io.IOException;
@@ -19,7 +20,7 @@ public class PeticionNuevoLibro  extends Thread{
 
         URL url = null;
         try {
-            url = new URL("http://192.168.1.144:8080/BibliotecaAPI/resources/app/nuevoLibro");
+            url = new URL("http://192.168.1.148:8080/BibliotecaAPI/resources/app/nuevoLibro");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             Log.v("prueba", conn.getRequestMethod());
             Log.v("Response message",conn.getResponseMessage());

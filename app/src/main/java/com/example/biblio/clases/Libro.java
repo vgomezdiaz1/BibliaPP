@@ -34,13 +34,30 @@ public class Libro {
     public Libro() {
     }
 
-    public Libro(int id, String isbn, String titulo, String sinopsis, int hojas, Date creado) {
+    public Libro(int id, String isbn, String titulo, String sinopsis, int hojas,String url) {
         this.id = id;
         this.isbn = isbn;
         this.titulo = titulo;
         this.sinopsis = sinopsis;
         this.hojas = hojas;
-        this.creado = creado;
+        this.url = url;
+    }
+
+    public Libro(int id, String isbn, String titulo, String sinopsis, int hojas, String url,
+                 boolean en_posesion, boolean deseado, boolean leido, boolean favorito,
+                 Autor autor, ArrayList<Tematica> tematica) {
+        this.id = id;
+        this.isbn = isbn;
+        this.titulo = titulo;
+        this.sinopsis = sinopsis;
+        this.hojas = hojas;
+        this.url = url;
+        this.en_posesion = en_posesion;
+        this.deseado = deseado;
+        this.leido = leido;
+        this.favorito = favorito;
+        this.autor = autor;
+        this.tematica = tematica;
     }
 
     public int getId() {
