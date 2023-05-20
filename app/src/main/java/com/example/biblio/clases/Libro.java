@@ -60,6 +60,7 @@ public class Libro {
         this.tematica = tematica;
     }
 
+
     public int getId() {
         return id;
     }
@@ -172,7 +173,24 @@ public class Libro {
                 ", titulo='" + titulo + '\'' +
                 ", sinopsis='" + sinopsis + '\'' +
                 ", hojas=" + hojas +
+                ", url=" + url +
+                '}';
+    }
+
+    public String toStringCompleto() {
+        return "Libro{" +
+                "id=" + id +
+                ", isbn='" + isbn + '\'' +
+                ", titulo='" + titulo + '\'' +
+                ", hojas=" + hojas +
                 ", creado=" + creado +
+                ", url='" + url + '\'' +
+                ", en_posesion=" + en_posesion +
+                ", deseado=" + deseado +
+                ", leido=" + leido +
+                ", favorito=" + favorito +
+                ", autor=" + autor.getNombre() +
+                ", tematica=" + this.toStringTematicas() +
                 '}';
     }
 

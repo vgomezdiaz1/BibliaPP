@@ -1,5 +1,6 @@
 package com.example.biblio;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ public class MiAdaptador extends RecyclerView.Adapter<MiAdaptador.MyViewHolder> 
         TextView txtNombre;
         TextView txtAutor;
         TextView txtTematicas;
+        TextView txtId;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -33,6 +35,15 @@ public class MiAdaptador extends RecyclerView.Adapter<MiAdaptador.MyViewHolder> 
             txtNombre = itemView.findViewById(R.id.textNombreLibro);
             txtAutor = itemView.findViewById(R.id.textAutor);
             txtTematicas = itemView.findViewById(R.id.textSinopsis);
+            txtId = itemView.findViewById(R.id.textID);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(itemView.getContext(),InformacionLibroActivity.class);
+                    i.putExtra("libro",txtId.getText().toString());
+                    itemView.getContext().startActivity(i);
+                }
+            });
         }
     }
 
@@ -55,6 +66,8 @@ public class MiAdaptador extends RecyclerView.Adapter<MiAdaptador.MyViewHolder> 
         holder.txtNombre.setText(libros.get(position).getTitulo());
         holder.txtAutor.setText(libros.get(position).getAutor().getNombre());
         holder.txtTematicas.setText(libros.get(position).toStringTematicas());
+        System.out.println(libros.get(position).toStringCompleto());
+        holder.txtId.setText(libros.get(position).getId() + "");
     }
 
     @Override

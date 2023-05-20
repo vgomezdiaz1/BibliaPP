@@ -36,6 +36,14 @@
             android:layout_height="wrap_content"
             android:text="TextView" />
 
+        <TextView
+            android:id="@+id/textID"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:visibility="gone"
+            tools:visibility="gone" />
+
     </LinearLayout>
 
 </LinearLayout>

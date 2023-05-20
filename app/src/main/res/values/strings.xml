@@ -16,4 +16,9 @@
     <string name="NuevoUsuarioBotonNuevo">Crear usuario</string>
     <string name="ListadoLibrosNuevoLibro">Nuevo libro</string>
     <string name="ListadoLibrosCerrarSesion">Cerrar sesión</string>
+    <string name="InformacionLibrosen_posesion">Lo tengo</string>
+    <string name="InformacionLibrosdeseado">Lo quiero</string>
+    <string name="InformacionLibrosleido">Leido</string>
+    <string name="InformacionLibrosfavorito">Favorito</string>
+    <string name="InformacionLibrosBotonGuardarCambios">Guardar cambios</string>
 </resources>

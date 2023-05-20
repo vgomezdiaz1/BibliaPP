@@ -21,7 +21,7 @@ public class PeticionLibros extends Thread{
 
     Usuario usuario;
     ArrayList<Libro> libros = new ArrayList<>();
-    public PeticionLibros(Usuario usuario, ArrayList<Libro> libros, Resources resources){
+    public PeticionLibros(Usuario usuario, ArrayList<Libro> libros){
         this.usuario = usuario;
         this.libros = libros;
     }

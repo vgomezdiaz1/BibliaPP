@@ -30,8 +30,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
         myDB.execSQL(
                 "CREATE TABLE IF NOT EXISTS usuario " +
@@ -98,7 +96,10 @@ public class MainActivity extends AppCompatActivity {
             i.putExtra("contrasenya", usuario.getContrasenya());
             i.putExtra("iniciado",true);
             startActivity(i);
+            finish();
         }
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
     }
 
     public void inciarSesion(View v){

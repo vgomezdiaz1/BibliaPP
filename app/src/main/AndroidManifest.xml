@@ -18,6 +18,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".InformacionLibroActivity"
+            android:exported="false" />
+        <activity
             android:name=".ListadoLibrosActivity"
             android:exported="false" />
         <activity

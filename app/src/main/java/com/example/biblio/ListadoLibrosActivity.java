@@ -41,10 +41,6 @@ public class ListadoLibrosActivity extends AppCompatActivity {
             while(cursor.moveToNext()){
                 autores.add(new Autor(cursor.getInt(0),cursor.getString(1)));
             }
-            cursor = myDB.rawQuery("select * from tematica",null);
-            while(cursor.moveToNext()){
-                tematicas.add(new Tematica(cursor.getInt(0),cursor.getString(1)));
-            }
             cursor = myDB.rawQuery("select l.id, l.isbn, l.titulo, l.sinopsis, l.hojas, l.url," +
                     " l.en_posesion, l.deseado, l.leido, l.favorito, l.id_autor from libro l" ,null);
             while(cursor.moveToNext()){
@@ -68,20 +64,20 @@ public class ListadoLibrosActivity extends AppCompatActivity {
                     }
                 }
                 ArrayList<Tematica> temas = new ArrayList<>();
-
                 cursor1= myDB1.rawQuery("select t.id, t.nombre from tematica t " +
                         "inner join libro_tematica lt on t.id = lt.id_tematica " +
                         "where lt.id_libro =  " + id,null);
                 while(cursor1.moveToNext()){
-                    temas.add(new Tematica(cursor.getInt(0),cursor.getString(1)));
+                    temas.add(new Tematica(cursor1.getInt(0),cursor1.getString(1)));
                 }
-                libros.add(new Libro(id,isbn,titulo,sinopsis,hojas,url,en_posesion,deseado,leido,favorito,autor,temas));
+                Libro l = new Libro(id,isbn,titulo,sinopsis,hojas,url,en_posesion,deseado,leido,favorito,autor,temas);
+                libros.add(l);
             }
             cursor.close();
             myDB.close();
             myDB1.close();
         }else{
-            PeticionLibros pl = new PeticionLibros(u,libros, this.getResources());
+            PeticionLibros pl = new PeticionLibros(u,libros);
             pl.start();
             try {
                 pl.join();
@@ -90,7 +86,7 @@ public class ListadoLibrosActivity extends AppCompatActivity {
             }
             guardarDatosLibros(libros);
             guardarDatosAutores(libros, autores);
-            guardarDatosTematicas(libros, tematicas);
+            guardarDatosTematicas(libros);
         }
         RecyclerView rv = findViewById(R.id.listaLibros);
         rv.setHasFixedSize(true);
@@ -146,7 +142,8 @@ public class ListadoLibrosActivity extends AppCompatActivity {
         myDB.close();
     }
 
-    public void guardarDatosTematicas(ArrayList<Libro> libros, ArrayList<Tematica> tematicas){
+    public void guardarDatosTematicas(ArrayList<Libro> libros){
+        ArrayList<Tematica> tematicas = new ArrayList<>();
         for (Libro li: libros) {
             for (Tematica te: li.getTematica()) {
                 if(!tematicas.contains(te)){
@@ -180,5 +177,6 @@ public class ListadoLibrosActivity extends AppCompatActivity {
         myDB.delete("usuario","",null);
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
+        finish();
     }
 }
