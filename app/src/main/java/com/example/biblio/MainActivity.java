@@ -1,30 +1,18 @@
 package com.example.biblio;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.biblio.clases.Libro;
 import com.example.biblio.clases.Usuario;
 import com.example.biblio.peticiones.PeticionInicioSesion;
-import com.example.biblio.peticiones.PeticionLibros;
-import com.example.biblio.peticiones.PeticionNuevoLibro;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 

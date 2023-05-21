@@ -1,12 +1,12 @@
 package com.example.biblio.peticiones;
 
-import android.content.res.Resources;
-import android.util.JsonReader;
+import static android.content.Context.MODE_PRIVATE;
+import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
 
-import com.example.biblio.clases.Autor;
-import com.example.biblio.clases.Libro;
-import com.example.biblio.clases.Tematica;
-import com.example.biblio.clases.Usuario;
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.example.biblio.R;
 import com.example.biblio.clases.UsuarioLibro;
 
 import java.io.BufferedInputStream;
@@ -17,7 +17,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
 
 public class PeticionActualizarLibro extends Thread{
 
@@ -37,6 +36,7 @@ public class PeticionActualizarLibro extends Thread{
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestProperty("Content-Type", "text/plain");
             conn.setRequestMethod("POST");
+            conn.setConnectTimeout(5000);
             try(OutputStream os = conn.getOutputStream()) {
                 System.out.println(ul.toString());
                 byte[] input = ul.toString().getBytes("utf-8");
@@ -54,9 +54,22 @@ public class PeticionActualizarLibro extends Thread{
                 }
                 in.close();
                 System.out.println("Completado " + completado);
+                if(completado.equals("true")){
+                    ContentValues cv = new ContentValues();
+                    cv.put("en_posesion", ul.isEn_posesion());
+                    cv.put("deseado", ul.isDeseado());
+                    cv.put("leido", ul.isLeido());
+                    cv.put("favorito", ul.isFavorito());
+                    SQLiteDatabase myDB = openOrCreateDatabase(R.string.db+"", null);
+                    int c = myDB.update("libro", cv, "id = ? ", new String[]{this.ul.getLibro().getId() + ""});
+                }else{
+                    System.out.println("No se ha podido actualizar");
+                }
             }else{
 
             }
+        } catch (java.net.SocketTimeoutException e) {
+            System.out.println("Tiempo demasiado largo");
         } catch (IOException e) {
             e.printStackTrace();
         }
