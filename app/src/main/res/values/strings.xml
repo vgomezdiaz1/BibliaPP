@@ -24,4 +24,5 @@
     <string name="AddLibroNuevoLibro">Introduce el isbn</string>
     <string name="AddLibroeditTextISBN">ISBN</string>
     <string name="AddLibroBotonBuscar">Buscar ISBN</string>
+    <string name="AddLibroBotonActivarCamara">Activar camara</string>
 </resources>

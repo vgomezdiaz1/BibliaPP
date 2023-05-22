@@ -1,5 +1,6 @@
 package com.example.biblio;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
@@ -14,7 +15,11 @@ import com.example.biblio.clases.Autor;
 import com.example.biblio.clases.Libro;
 import com.example.biblio.clases.Tematica;
 import com.example.biblio.clases.Usuario;
+import com.example.biblio.databinding.ActivityAddLibroBinding;
+import com.example.biblio.databinding.ActivityMainBinding;
 import com.example.biblio.peticiones.PeticionNuevoLibro;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.util.ArrayList;
 
@@ -22,6 +27,15 @@ public class AddLibroActivity extends AppCompatActivity {
 
     Usuario u;
     ArrayList<Libro> libro = new ArrayList<>();
+
+    ActivityAddLibroBinding bindign;
+    private final ActivityResultLauncher<ScanOptions> codigoBarras = registerForActivityResult(new ScanContract(), result ->{
+        if(result.getContents() == null){
+            Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show();
+        }else{
+            bindign.editTextAddLibroISBN.setText(result.getContents());
+        }
+    });
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +43,15 @@ public class AddLibroActivity extends AppCompatActivity {
         Intent i = getIntent();
         this.u = new Usuario(i.getIntExtra("id",0),i.getStringExtra("username"), i.getStringExtra("mail")
                 , i.getStringExtra("nombre"),i.getStringExtra("apellido"),i.getStringExtra("contrasenya"));
+        bindign = ActivityAddLibroBinding.inflate(getLayoutInflater());
+        setContentView(bindign.getRoot());
+
+        bindign.buttonActiuvarCamara.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                escanear();
+            }
+        });
     }
 
     public void botonBuscarISBN(View v){
@@ -132,5 +155,17 @@ public class AddLibroActivity extends AppCompatActivity {
             }
         }
         myDB.close();
+    }
+
+    public void escanear(){
+        ScanOptions options = new ScanOptions();
+        options.setDesiredBarcodeFormats(ScanOptions.ALL_CODE_TYPES);
+        options.setPrompt("Escanear codigo");
+        options.setCameraId(0);
+        options.setOrientationLocked(false);
+        options.setBeepEnabled(true);
+        options.setCaptureActivity(CaptureActivityPortraint.class);
+        options.setBarcodeImageEnabled(false);
+        codigoBarras.launch(options);
     }
 }
