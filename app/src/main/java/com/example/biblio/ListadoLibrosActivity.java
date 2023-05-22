@@ -23,6 +23,7 @@ import java.util.ArrayList;
 
 public class ListadoLibrosActivity extends AppCompatActivity {
 
+    Usuario u;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +32,7 @@ public class ListadoLibrosActivity extends AppCompatActivity {
         ArrayList<Autor> autores = new ArrayList<>();
         ArrayList<Tematica> tematicas = new ArrayList<>();
         Intent i = getIntent();
-        Usuario u = new Usuario(i.getIntExtra("id",0),i.getStringExtra("username"), i.getStringExtra("mail")
+        this.u = new Usuario(i.getIntExtra("id",0),i.getStringExtra("username"), i.getStringExtra("mail")
                 , i.getStringExtra("nombre"),i.getStringExtra("apellido"),i.getStringExtra("contrasenya"));
         if(i.getBooleanExtra("iniciado",false)){
             SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
@@ -180,5 +181,11 @@ public class ListadoLibrosActivity extends AppCompatActivity {
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
+    }
+
+    public void addLibro(View v){
+        Intent i = new Intent(this, AddLibroActivity.class);
+        i.putExtra("id_usuario", this.u.getId());
+        startActivity(i);
     }
 }

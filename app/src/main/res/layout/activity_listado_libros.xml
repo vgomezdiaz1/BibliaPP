@@ -28,6 +28,7 @@
                 android:id="@+id/buttonNuevoLibro"
                 android:layout_width="169dp"
                 android:layout_height="38dp"
+                android:onClick="addLibro"
                 android:text="@string/ListadoLibrosNuevoLibro" />
         </LinearLayout>
 

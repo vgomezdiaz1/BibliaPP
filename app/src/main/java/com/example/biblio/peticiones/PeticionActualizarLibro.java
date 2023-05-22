@@ -18,19 +18,18 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class PeticionActualizarLibro extends Thread{
+public class PeticionActualizarLibro extends Thread {
 
     UsuarioLibro ul;
-    String completado = "";
-    public PeticionActualizarLibro(UsuarioLibro ul, String completado){
+    public PeticionActualizarLibro(UsuarioLibro ul){
         this.ul = ul;
-        this.completado = completado;
     }
 
     @Override
-    public void run() {
+    public void run(){
         super.run();
         URL url = null;
+        String o = "";
         try {
             url = new URL("http://192.168.1.148:8080/BibliotecaAPI/resources/app/actualizarLibro");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -38,11 +37,9 @@ public class PeticionActualizarLibro extends Thread{
             conn.setRequestMethod("POST");
             conn.setConnectTimeout(5000);
             try(OutputStream os = conn.getOutputStream()) {
-                System.out.println(ul.toString());
                 byte[] input = ul.toString().getBytes("utf-8");
                 os.write(input, 0, input.length);
             }catch(Exception e){
-                e.printStackTrace();
             }
             if(conn.getResponseCode()==200){
                 InputStream in = new BufferedInputStream(conn.getInputStream());
@@ -50,26 +47,15 @@ public class PeticionActualizarLibro extends Thread{
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
                     String line = "";
                     while ((line = bufferedReader.readLine()) != null)
-                        completado += line;
+                        o += line;
                 }
+                ul.getUsuario().setId(-5);
                 in.close();
-                System.out.println("Completado " + completado);
-                if(completado.equals("true")){
-                    ContentValues cv = new ContentValues();
-                    cv.put("en_posesion", ul.isEn_posesion());
-                    cv.put("deseado", ul.isDeseado());
-                    cv.put("leido", ul.isLeido());
-                    cv.put("favorito", ul.isFavorito());
-                    SQLiteDatabase myDB = openOrCreateDatabase(R.string.db+"", null);
-                    int c = myDB.update("libro", cv, "id = ? ", new String[]{this.ul.getLibro().getId() + ""});
-                }else{
-                    System.out.println("No se ha podido actualizar");
-                }
             }else{
 
             }
         } catch (java.net.SocketTimeoutException e) {
-            System.out.println("Tiempo demasiado largo");
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
