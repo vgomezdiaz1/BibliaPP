@@ -148,7 +148,6 @@ public class InformacionLibroActivity extends AppCompatActivity implements Lifec
                 cv.put("favorito", this.favorito.isChecked());
                 SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
                 int c = myDB.update("libro", cv, "id = ? ", new String[]{this.libro.getId() + ""});
-                System.out.println(c);
             }
         } catch (Exception e) {
             Toast.makeText(this, "No se ha podido actualizar la informacion", Toast.LENGTH_SHORT).show();

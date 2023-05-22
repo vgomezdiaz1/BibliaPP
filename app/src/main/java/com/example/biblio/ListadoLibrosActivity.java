@@ -185,7 +185,14 @@ public class ListadoLibrosActivity extends AppCompatActivity {
 
     public void addLibro(View v){
         Intent i = new Intent(this, AddLibroActivity.class);
-        i.putExtra("id_usuario", this.u.getId());
+        i.putExtra("id", u.getId());
+        i.putExtra("username", u.getUsername());
+        i.putExtra("nombre", u.getNombre());
+        i.putExtra("mail", u.getMail());
+        i.putExtra("apellido", u.getApellido());
+        i.putExtra("contrasenya", u.getContrasenya());
+        i.putExtra("iniciado",false);
         startActivity(i);
+        finish();
     }
 }

@@ -66,7 +66,6 @@ public class MiAdaptador extends RecyclerView.Adapter<MiAdaptador.MyViewHolder> 
         holder.txtNombre.setText(libros.get(position).getTitulo());
         holder.txtAutor.setText(libros.get(position).getAutor().getNombre());
         holder.txtTematicas.setText(libros.get(position).toStringTematicas());
-        System.out.println(libros.get(position).toStringCompleto());
         holder.txtId.setText(libros.get(position).getId() + "");
     }
 

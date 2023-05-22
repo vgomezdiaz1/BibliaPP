@@ -61,7 +61,6 @@ public class PeticionInicioSesion extends Thread{
                     }else if(clave.equals("apellido")){
                         usuario.setApellido(jr.nextString());
                     }else{
-                        System.out.println(jr.toString());
                         jr.skipValue();
                     }
                 }
