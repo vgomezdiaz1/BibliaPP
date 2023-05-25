@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.biblio.clases.Libro;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -61,8 +62,10 @@ public class MiAdaptador extends RecyclerView.Adapter<MiAdaptador.MyViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        DownloadImageTask u1 = new DownloadImageTask(holder.img);
-        u1.execute(libros.get(position).getUrl());
+        Picasso.get()
+                .load(libros.get(position).getUrl())
+                .fit()
+                .into(holder.img);
         holder.txtNombre.setText(libros.get(position).getTitulo());
         holder.txtAutor.setText(libros.get(position).getAutor().getNombre());
         holder.txtTematicas.setText(libros.get(position).toStringTematicas());

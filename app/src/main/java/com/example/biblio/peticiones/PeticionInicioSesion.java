@@ -68,6 +68,7 @@ public class PeticionInicioSesion extends Thread{
 
             }
         } catch (IOException e) {
+            this.usuario.setId(-1);
             e.printStackTrace();
         }
     }

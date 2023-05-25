@@ -28,6 +28,7 @@ import com.example.biblio.clases.Tematica;
 import com.example.biblio.clases.Usuario;
 import com.example.biblio.clases.UsuarioLibro;
 import com.example.biblio.peticiones.PeticionActualizarLibro;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -59,8 +60,10 @@ public class InformacionLibroActivity extends AppCompatActivity implements Lifec
         this.deseado = findViewById(R.id.switchdeseado);
         this.leido = findViewById(R.id.switchLeido);
         this.favorito = findViewById(R.id.switchfavorito);
-        DownloadImageTask u1 = new DownloadImageTask(foto);
-        u1.execute(libro.getUrl());
+        Picasso.get()
+                .load(libro.getUrl())
+                .fit()
+                .into(foto);
         textTitulo.setText(libro.getTitulo());
         textAutor.setText(libro.getAutor().getNombre());
         textHojas.setText(libro.getHojas() + "");

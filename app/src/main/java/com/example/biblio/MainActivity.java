@@ -99,11 +99,13 @@ public class MainActivity extends AppCompatActivity {
         PeticionInicioSesion p = new PeticionInicioSesion(u);
         p.start();
         try {
-            p.join();
+            p.join(8000);
         }catch(Exception e){
             e.printStackTrace();
         }
-        if(u.getId()== 0 ){
+        if(u.getId()== 0){
+            Toast.makeText(this, "No hay conexion con el servidor", Toast.LENGTH_SHORT).show();
+        }else if(u.getId()== -1){
             Toast.makeText(this, "Usuario o contraseña incorrecta", Toast.LENGTH_SHORT).show();
         }else{
             guardarUsuario(u);
