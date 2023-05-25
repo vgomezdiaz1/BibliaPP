@@ -23,14 +23,14 @@ import java.util.ArrayList;
 
 public class ListadoLibrosActivity extends AppCompatActivity {
 
+    ArrayList<Libro> libros = new ArrayList<>();
+    ArrayList<Autor> autores = new ArrayList<>();
+    ArrayList<Tematica> tematicas = new ArrayList<>();
     Usuario u;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado_libros);
-        ArrayList<Libro> libros = new ArrayList<>();
-        ArrayList<Autor> autores = new ArrayList<>();
-        ArrayList<Tematica> tematicas = new ArrayList<>();
         Intent i = getIntent();
         this.u = new Usuario(i.getIntExtra("id",0),i.getStringExtra("username"), i.getStringExtra("mail")
                 , i.getStringExtra("nombre"),i.getStringExtra("apellido"),i.getStringExtra("contrasenya"));
@@ -66,11 +66,16 @@ public class ListadoLibrosActivity extends AppCompatActivity {
                     }
                 }
                 ArrayList<Tematica> temas = new ArrayList<>();
+                Tematica tema = null;
                 cursor1= myDB1.rawQuery("select t.id, t.nombre from tematica t " +
                         "inner join libro_tematica lt on t.id = lt.id_tematica " +
                         "where lt.id_libro =  " + id,null);
                 while(cursor1.moveToNext()){
-                    temas.add(new Tematica(cursor1.getInt(0),cursor1.getString(1)));
+                    tema = new Tematica(cursor1.getInt(0),cursor1.getString(1));
+                    temas.add(tema);
+                }
+                if(!tematicas.contains(tema)){
+                    tematicas.add(tema);
                 }
                 Libro l = new Libro(id,isbn,titulo,sinopsis,hojas,id_portada,url,en_posesion,deseado,leido,favorito,autor,temas);
                 libros.add(l);
@@ -90,7 +95,7 @@ public class ListadoLibrosActivity extends AppCompatActivity {
             guardarDatosAutores(libros, autores);
             guardarDatosTematicas(libros);
         }
-        RecyclerView rv = findViewById(R.id.listaLibros);
+        RecyclerView rv = findViewById(R.id.listaBusquedaLibros);
         rv.setHasFixedSize(true);
 
         RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
@@ -130,8 +135,10 @@ public class ListadoLibrosActivity extends AppCompatActivity {
     }
 
     public void guardarDatosAutores(ArrayList<Libro> libros, ArrayList<Autor> autores){
+        ArrayList<Integer> lista = new ArrayList<>();
         for (Libro li: libros) {
-            if(!autores.contains(li.getAutor())){
+            if(!lista.contains(li.getAutor().getId())){
+                lista.add(li.getAutor().getId());
                 autores.add(li.getAutor());
             }
         }
@@ -178,6 +185,7 @@ public class ListadoLibrosActivity extends AppCompatActivity {
         myDB.delete("libro","",null);
         myDB.delete("tematica","",null);
         myDB.delete("usuario","",null);
+        myDB.delete("autor","",null);
         Intent i = new Intent(this, MainActivity.class);
         startActivity(i);
         finish();
@@ -194,5 +202,10 @@ public class ListadoLibrosActivity extends AppCompatActivity {
         i.putExtra("iniciado",false);
         startActivity(i);
         finish();
+    }
+
+    public void buscarLibros(View v){
+        Intent i = new Intent(this, BusquedaActivity.class);
+        startActivity(i);
     }
 }

@@ -18,7 +18,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".HomeActivity"
+            android:name=".BusquedaActivity"
             android:exported="false" />
         <activity
             android:name=".AddLibroActivity"
@@ -45,7 +45,7 @@
             android:name=".CaptureActivityPortraint"
             android:screenOrientation="fullSensor"
             android:theme="@style/zxing_CaptureTheme"
-            android:windowSoftInputMode="stateAlwaysHidden"></activity>
+            android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 
 </manifest>

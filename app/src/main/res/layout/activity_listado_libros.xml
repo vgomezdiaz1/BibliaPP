@@ -20,21 +20,30 @@
 
             <Button
                 android:id="@+id/buttonCerrarSesion"
-                android:layout_width="173dp"
-                android:layout_height="48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:onClick="cerrarSesion"
                 android:text="@string/ListadoLibrosCerrarSesion" />
 
             <Button
+                android:id="@+id/buttonBuscarLibro"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="buscarLibros"
+                android:text="@string/ListadoLibrosBuscarLibro" />
+
+            <Button
                 android:id="@+id/buttonNuevoLibro"
-                android:layout_width="169dp"
-                android:layout_height="48dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
                 android:onClick="addLibro"
                 android:text="@string/ListadoLibrosNuevoLibro" />
+
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listaLibros"
+            android:id="@+id/listaBusquedaLibros"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

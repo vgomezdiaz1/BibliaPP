@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/Layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".BusquedaActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textBusquedaLibro"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:text="@string/BusquedaLibroTitulo"
+            android:textAlignment="center"
+            android:textIsSelectable="false"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/editTextBusquedaTitulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:autofillHints="@string/BusquedaLibroTitulo"
+            android:ems="10"
+            android:inputType="text"
+            android:text="@string/BusquedaLibroTitulo" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textBusquedaAutor"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:text="@string/BusquedaLibroAutor"
+            android:textAlignment="center"
+            android:textIsSelectable="false"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/spinnerBusquedaAutor"
+            android:layout_width="match_parent"
+            android:layout_height="48dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textBusquedaTematica"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            android:textIsSelectable="false"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="@string/BusquedaLibroTematica" />
+
+        <Spinner
+            android:id="@+id/spinnerBusquedaTematica"
+            android:layout_width="match_parent"
+            android:layout_height="48dp" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonBusquedaBuscar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="buscarLibro"
+        android:text="@string/BusquedaLibroButtonBuscar" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listaBusquedaLibros"
+        android:layout_width="match_parent"
+        android:layout_height="548dp" />
+
+</LinearLayout>

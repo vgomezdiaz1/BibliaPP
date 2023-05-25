@@ -137,5 +137,6 @@ public class MainActivity extends AppCompatActivity {
         cv.put("contrasenya",u.getContrasenya());
         SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
         myDB.insert("usuario",null, cv);
+        myDB.close();
     }
 }
