@@ -15,19 +15,20 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingVertical="5dp">
 
             <Button
                 android:id="@+id/buttonCerrarSesion"
                 android:layout_width="173dp"
-                android:layout_height="38dp"
+                android:layout_height="48dp"
                 android:onClick="cerrarSesion"
                 android:text="@string/ListadoLibrosCerrarSesion" />
 
             <Button
                 android:id="@+id/buttonNuevoLibro"
                 android:layout_width="169dp"
-                android:layout_height="38dp"
+                android:layout_height="48dp"
                 android:onClick="addLibro"
                 android:text="@string/ListadoLibrosNuevoLibro" />
         </LinearLayout>
@@ -35,8 +36,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/listaLibros"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="4dp" />
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

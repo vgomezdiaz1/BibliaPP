@@ -7,22 +7,28 @@
 
     <ImageView
         android:id="@+id/imagePortada"
-        android:layout_width="300dp"
+        android:layout_width="151dp"
         android:layout_height="200dp"
         android:layout_weight="1"
+        android:paddingVertical="2dp"
         tools:srcCompat="@tools:sample/avatars" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical">
+        android:layout_weight="5"
+        android:orientation="vertical"
+        android:paddingHorizontal="5dp"
+        android:paddingVertical="2dp">
 
         <TextView
             android:id="@+id/textNombreLibro"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:text="TextView" />
+            android:layout_height="67dp"
+            android:text="TextView"
+            android:textIsSelectable="false"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/textAutor"
