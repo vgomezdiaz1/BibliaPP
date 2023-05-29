@@ -105,8 +105,6 @@ public class BusquedaActivity extends AppCompatActivity {
 
 
         }
-
-        System.out.println(consulta);
         SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
         Cursor cursor = myDB.rawQuery(consulta,null);
         Cursor cursor1 = null;
@@ -139,7 +137,6 @@ public class BusquedaActivity extends AppCompatActivity {
                 temas.add(new Tematica(cursor1.getInt(0),cursor1.getString(1)));
             }
             Libro l = new Libro(id,isbn,titulo,sinopsis,hojas,id_portada,url,en_posesion,deseado,leido,favorito,autor,temas);
-            System.out.println(l);
             this.libros.add(l);
         }
         cursor.close();

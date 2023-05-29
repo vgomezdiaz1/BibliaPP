@@ -30,8 +30,8 @@
             android:layout_weight="1"
             android:autofillHints="@string/BusquedaLibroTitulo"
             android:ems="10"
-            android:inputType="text"
-            android:text="@string/BusquedaLibroTitulo" />
+            android:hint="@string/BusquedaLibroTitulo"
+            android:inputType="text" />
     </LinearLayout>
 
     <LinearLayout
@@ -88,6 +88,6 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listaBusquedaLibros"
         android:layout_width="match_parent"
-        android:layout_height="548dp" />
+        android:layout_height="match_parent" />
 
 </LinearLayout>

@@ -69,6 +69,7 @@ public class AddLibroActivity extends AppCompatActivity {
             guardarDatosLibros(libro);
             guardarDatosAutores(libro);
             guardarDatosTematicas(libro);
+            Toast.makeText(this, "Libro guardado", Toast.LENGTH_LONG).show();
             Intent i = new Intent(this, ListadoLibrosActivity.class);
             i.putExtra("id", u.getId());
             i.putExtra("username", u.getUsername());
@@ -77,6 +78,8 @@ public class AddLibroActivity extends AppCompatActivity {
             i.putExtra("apellido", u.getApellido());
             i.putExtra("contrasenya", u.getContrasenya());
             i.putExtra("iniciado",true);
+            i.putExtra("seleccionarLibro", true);
+            i.putExtra("idNuevo", libro.get(0).getId() + "");
             startActivity(i);
             finish();
         }else{

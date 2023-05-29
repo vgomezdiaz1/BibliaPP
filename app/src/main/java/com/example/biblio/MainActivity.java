@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
             i.putExtra("apellido", usuario.getApellido());
             i.putExtra("contrasenya", usuario.getContrasenya());
             i.putExtra("iniciado",true);
+            i.putExtra("seleccionarLibro",false);
             startActivity(i);
             finish();
         }
@@ -117,6 +118,7 @@ public class MainActivity extends AppCompatActivity {
             i.putExtra("apellido", u.getApellido());
             i.putExtra("contrasenya", u.getContrasenya());
             i.putExtra("iniciado",false);
+            i.putExtra("seleccionarLibro",false);
             startActivity(i);
             finish();
         }

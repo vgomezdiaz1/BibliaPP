@@ -80,6 +80,12 @@ public class ListadoLibrosActivity extends AppCompatActivity {
                 Libro l = new Libro(id,isbn,titulo,sinopsis,hojas,id_portada,url,en_posesion,deseado,leido,favorito,autor,temas);
                 libros.add(l);
             }
+            if(i.getBooleanExtra("seleccionarLibro",true) && i.getBooleanExtra("iniciado",true)){
+                System.out.println("info");
+                Intent in = new Intent(this,InformacionLibroActivity.class);
+                in.putExtra("libro",i.getStringExtra("idNuevo"));
+                startActivity(in);
+            }
             cursor.close();
             myDB.close();
             myDB1.close();
@@ -201,7 +207,6 @@ public class ListadoLibrosActivity extends AppCompatActivity {
         i.putExtra("contrasenya", u.getContrasenya());
         i.putExtra("iniciado",false);
         startActivity(i);
-        finish();
     }
 
     public void buscarLibros(View v){
