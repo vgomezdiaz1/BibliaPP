@@ -10,9 +10,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.biblio.clases.Autor;
 import com.example.biblio.clases.Libro;
@@ -65,10 +67,43 @@ public class BusquedaActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, nombresTematicas);
         ArrayAdapter<String> adapterBooleanos = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, nombresBooleanos);
-        System.out.println("entrandoi");
         this.selectorautores.setAdapter(adapterAutor);
         this.selectortematicas.setAdapter(adapterTematicas);
         this.selectorBooleanos.setAdapter(adapterBooleanos);
+
+        selectorautores.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+                    public void onItemSelected(AdapterView<?> spn,
+                                               View v,
+                                               int posicion,
+                                               long id) {
+                        buscarLibros();
+                    }
+                    public void onNothingSelected(AdapterView<?> spn) {
+                    }
+                });
+        selectortematicas.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+                    public void onItemSelected(AdapterView<?> spn,
+                                               View v,
+                                               int posicion,
+                                               long id) {
+                        buscarLibros();
+                    }
+                    public void onNothingSelected(AdapterView<?> spn) {
+                    }
+                });
+        selectorBooleanos.setOnItemSelectedListener(
+                new AdapterView.OnItemSelectedListener() {
+                    public void onItemSelected(AdapterView<?> spn,
+                                               View v,
+                                               int posicion,
+                                               long id) {
+                        buscarLibros();
+                    }
+                    public void onNothingSelected(AdapterView<?> spn) {
+                    }
+                });
     }
 
     public void rellenarTematicas(){
@@ -96,6 +131,107 @@ public class BusquedaActivity extends AppCompatActivity {
     }
 
     public void buscarLibro(View v){
+        this.libros.clear();
+        int idAutor = -1;
+        int idTematica = -1;
+        boolean aut = false;
+        String consulta = "select l.id, l.isbn, l.titulo, l.sinopsis, l.hojas, l.id_portada, l.url," +
+                " l.en_posesion, l.deseado, l.leido, l.favorito, l.id_autor from libro l ";
+        if(selectortematicas.getSelectedItemPosition()>0) {
+            idTematica = tematicas.get(selectortematicas.getSelectedItemPosition()).getId();
+            consulta += "inner join libro_tematica lt on l.id = lt.id_libro where lt.id_tematica = " + idTematica + " ";
+            aut = true;
+        }
+
+        if(tNom.length()>0){
+            if(aut){
+                consulta += " and l.titulo like '%" + tNom.getText().toString() + "%' ";
+            }else{
+                consulta += " where l.titulo like '%" + tNom.getText().toString()+ "%' ";
+                aut = true;
+            }
+        }
+
+        if(selectorautores.getSelectedItemPosition()>0){
+            idAutor = autores.get(selectorautores.getSelectedItemPosition()).getId();
+            if(aut){
+                consulta += " and l.id_autor = " + idAutor;
+            }else{
+                consulta += " where l.id_autor = " + idAutor;
+                aut = true;
+            }
+        }
+
+        if(selectorBooleanos.getSelectedItemPosition()>0){
+            if(aut){
+                if(selectorBooleanos.getSelectedItemPosition() == 1){
+                    consulta += " and l.en_posesion = 1 ";
+                }else if(selectorBooleanos.getSelectedItemPosition() == 2){
+                    consulta += " and l.leido = 1 ";
+                }else if(selectorBooleanos.getSelectedItemPosition() == 3){
+                    consulta += " and l.deseado = 1 ";
+                }else if(selectorBooleanos.getSelectedItemPosition() == 4){
+                    consulta += " and l.favorito = 1 ";
+                }
+            }else{
+                if(selectorBooleanos.getSelectedItemPosition() == 1){
+                    consulta += " where l.en_posesion = 1 ";
+                }else if(selectorBooleanos.getSelectedItemPosition() == 2){
+                    consulta += " where l.leido = 1 ";
+                }else if(selectorBooleanos.getSelectedItemPosition() == 3){
+                    consulta += " where l.deseado = 1 ";
+                }else if(selectorBooleanos.getSelectedItemPosition() == 4){
+                    consulta += " where l.favorito = 1 ";
+                }
+                aut = true;
+            }
+        }
+        SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
+        Cursor cursor = myDB.rawQuery(consulta,null);
+        Cursor cursor1 = null;
+        while(cursor.moveToNext()){
+            int id = cursor.getInt(0);
+            String isbn = cursor.getString(1);
+            String titulo = cursor.getString(2);
+            String sinopsis = cursor.getString(3);
+            int hojas = cursor.getInt(4);
+            int id_portada = cursor.getInt(5);
+            String url = cursor.getString(6);
+            boolean en_posesion = trueOrFalse(cursor.getInt(7));
+            boolean deseado = trueOrFalse(cursor.getInt(8));
+            boolean leido = trueOrFalse(cursor.getInt(9));
+            boolean favorito = trueOrFalse(cursor.getInt(10));
+            int id_autor = cursor.getInt(11);
+            Autor autor = new Autor();
+            for (Autor a: autores) {
+                if(id_autor == a.getId()){
+                    autor.setId(a.getId());
+                    autor.setNombre(a.getNombre());
+                    break;
+                }
+            }
+            ArrayList<Tematica> temas = new ArrayList<>();
+            cursor1= myDB.rawQuery("select t.id, t.nombre from tematica t " +
+                    "inner join libro_tematica lt on t.id = lt.id_tematica " +
+                    "where lt.id_libro =  " + id,null);
+            while(cursor1.moveToNext()){
+                temas.add(new Tematica(cursor1.getInt(0),cursor1.getString(1)));
+            }
+            Libro l = new Libro(id,isbn,titulo,sinopsis,hojas,id_portada,url,en_posesion,deseado,leido,favorito,autor,temas);
+            this.libros.add(l);
+        }
+        cursor.close();
+        RecyclerView rv = findViewById(R.id.listaBusquedaLibros);
+        rv.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
+        rv.setLayoutManager(lm);
+
+        MiAdaptador adaptador = new MiAdaptador(this.libros);
+        rv.setAdapter(adaptador);
+    }
+
+    public void buscarLibros(){
         this.libros.clear();
         int idAutor = -1;
         int idTematica = -1;
