@@ -14,8 +14,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.example.biblio.clases.Autor;
 import com.example.biblio.clases.Libro;
@@ -28,6 +26,7 @@ import java.util.ArrayList;
 public class ListadoLibrosActivity extends AppCompatActivity {
 
     ArrayList<Libro> libros = new ArrayList<>();
+    ArrayList<Libro> librosEnPosesion = new ArrayList<>();
     ArrayList<Autor> autores = new ArrayList<>();
     ArrayList<Tematica> tematicas = new ArrayList<>();
     Usuario u;
@@ -35,67 +34,16 @@ public class ListadoLibrosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado_libros);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("BibliApp");
+        toolbar.setTitleTextColor(0xffffffff);
         setSupportActionBar(toolbar);
         Intent i = getIntent();
         this.u = new Usuario(i.getIntExtra("id",0),i.getStringExtra("username"), i.getStringExtra("mail")
                 , i.getStringExtra("nombre"),i.getStringExtra("apellido"),i.getStringExtra("contrasenya"));
         if(i.getBooleanExtra("iniciado",false)){
-            SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
-            SQLiteDatabase myDB1 = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
-            Cursor cursor1 = null;
-            Cursor cursor = myDB.rawQuery("select * from autor",null);
-            while(cursor.moveToNext()){
-                autores.add(new Autor(cursor.getInt(0),cursor.getString(1)));
-            }
-            cursor = myDB.rawQuery("select l.id, l.isbn, l.titulo, l.sinopsis, l.hojas, l.id_portada, l.url," +
-                    " l.en_posesion, l.deseado, l.leido, l.favorito, l.id_autor from libro l" ,null);
-            while(cursor.moveToNext()){
-                int id = cursor.getInt(0);
-                String isbn = cursor.getString(1);
-                String titulo = cursor.getString(2);
-                String sinopsis = cursor.getString(3);
-                int hojas = cursor.getInt(4);
-                int id_portada = cursor.getInt(5);
-                String url = cursor.getString(6);
-                boolean en_posesion = trueOrFalse(cursor.getInt(7));
-                boolean deseado = trueOrFalse(cursor.getInt(8));
-                boolean leido = trueOrFalse(cursor.getInt(9));
-                boolean favorito = trueOrFalse(cursor.getInt(10));
-                int id_autor = cursor.getInt(11);
-                Autor autor = new Autor();
-                for (Autor a: autores) {
-                    if(id_autor == a.getId()){
-                        autor.setId(a.getId());
-                        autor.setNombre(a.getNombre());
-                        break;
-                    }
-                }
-                ArrayList<Tematica> temas = new ArrayList<>();
-                Tematica tema = null;
-                cursor1= myDB1.rawQuery("select t.id, t.nombre from tematica t " +
-                        "inner join libro_tematica lt on t.id = lt.id_tematica " +
-                        "where lt.id_libro =  " + id,null);
-                while(cursor1.moveToNext()){
-                    tema = new Tematica(cursor1.getInt(0),cursor1.getString(1));
-                    temas.add(tema);
-                }
-                if(!tematicas.contains(tema)){
-                    tematicas.add(tema);
-                }
-                Libro l = new Libro(id,isbn,titulo,sinopsis,hojas,id_portada,url,en_posesion,deseado,leido,favorito,autor,temas);
-                libros.add(l);
-            }
-            if(i.getBooleanExtra("seleccionarLibro",true) && i.getBooleanExtra("iniciado",true)){
-                System.out.println("info");
-                Intent in = new Intent(this,InformacionLibroActivity.class);
-                in.putExtra("libro",i.getStringExtra("idNuevo"));
-                startActivity(in);
-            }
-            cursor.close();
-            myDB.close();
-            myDB1.close();
+            cargarLibros(i);
+            librosEnPosesion();
         }else{
             PeticionLibros pl = new PeticionLibros(u,libros);
             pl.start();
@@ -108,19 +56,11 @@ public class ListadoLibrosActivity extends AppCompatActivity {
             guardarDatosAutores(libros, autores);
             guardarDatosTematicas(libros);
         }
-        RecyclerView rv = findViewById(R.id.listaBusquedaLibros);
-        rv.setHasFixedSize(true);
-
-        RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
-        rv.setLayoutManager(lm);
-
-        MiAdaptador adaptador = new MiAdaptador(libros);
-        rv.setAdapter(adaptador);
+        recargarLibrosEnPosesion();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -137,8 +77,28 @@ public class ListadoLibrosActivity extends AppCompatActivity {
         } else if (id == R.id.cerrarSesionToolbar) {
             cerrarSesion();
             return true;
+        } else if (id == R.id.VerTodoToolbar) {
+            if(item.getTitle().equals("Ver los que tienes")){
+                item.setTitle("Ver todos los buscados");
+                this.librosEnPosesion.clear();
+                this.libros.clear();
+                recargarLibros();
+                recargarLibrosEnPosesion();
+            }else{
+                item.setTitle("Ver los que tienes");
+                recargarLibrosBuscados();
+            }
+            return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.librosEnPosesion.clear();
+        this.libros.clear();
+        recargarLibros();
     }
 
     static boolean trueOrFalse(int n){
@@ -242,5 +202,144 @@ public class ListadoLibrosActivity extends AppCompatActivity {
     public void buscarLibros(){
         Intent i = new Intent(this, BusquedaActivity.class);
         startActivity(i);
+    }
+
+    public void librosEnPosesion(){
+        for (Libro l: this.libros) {
+            if(l.isEn_posesion()){
+                this.librosEnPosesion.add(l);
+            }
+        }
+    }
+
+    public void recargarLibrosBuscados(){
+        RecyclerView rv = findViewById(R.id.listaBusquedaLibros);
+        rv.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
+        rv.setLayoutManager(lm);
+
+        MiAdaptador adaptador = new MiAdaptador(this.libros);
+        rv.setAdapter(adaptador);
+    }
+
+    public void recargarLibrosEnPosesion(){
+        RecyclerView rv = findViewById(R.id.listaBusquedaLibros);
+        rv.setHasFixedSize(true);
+
+        RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
+        rv.setLayoutManager(lm);
+
+        MiAdaptador adaptador = new MiAdaptador(this.librosEnPosesion);
+        rv.setAdapter(adaptador);
+    }
+
+    public void cargarLibros(Intent i){
+        SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
+        SQLiteDatabase myDB1 = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
+        Cursor cursor1 = null;
+        Cursor cursor = myDB.rawQuery("select * from autor",null);
+        while(cursor.moveToNext()){
+            autores.add(new Autor(cursor.getInt(0),cursor.getString(1)));
+        }
+        cursor = myDB.rawQuery("select l.id, l.isbn, l.titulo, l.sinopsis, l.hojas, l.id_portada, l.url," +
+                " l.en_posesion, l.deseado, l.leido, l.favorito, l.id_autor from libro l" ,null);
+        while(cursor.moveToNext()){
+            int id = cursor.getInt(0);
+            String isbn = cursor.getString(1);
+            String titulo = cursor.getString(2);
+            String sinopsis = cursor.getString(3);
+            int hojas = cursor.getInt(4);
+            int id_portada = cursor.getInt(5);
+            String url = cursor.getString(6);
+            boolean en_posesion = trueOrFalse(cursor.getInt(7));
+            boolean deseado = trueOrFalse(cursor.getInt(8));
+            boolean leido = trueOrFalse(cursor.getInt(9));
+            boolean favorito = trueOrFalse(cursor.getInt(10));
+            int id_autor = cursor.getInt(11);
+            Autor autor = new Autor();
+            for (Autor a: autores) {
+                if(id_autor == a.getId()){
+                    autor.setId(a.getId());
+                    autor.setNombre(a.getNombre());
+                    break;
+                }
+            }
+            ArrayList<Tematica> temas = new ArrayList<>();
+            Tematica tema = null;
+            cursor1= myDB1.rawQuery("select t.id, t.nombre from tematica t " +
+                    "inner join libro_tematica lt on t.id = lt.id_tematica " +
+                    "where lt.id_libro =  " + id,null);
+            while(cursor1.moveToNext()){
+                tema = new Tematica(cursor1.getInt(0),cursor1.getString(1));
+                temas.add(tema);
+            }
+            if(!tematicas.contains(tema)){
+                tematicas.add(tema);
+            }
+            Libro l = new Libro(id,isbn,titulo,sinopsis,hojas,id_portada,url,en_posesion,deseado,leido,favorito,autor,temas);
+            libros.add(l);
+        }
+        if(i.getBooleanExtra("seleccionarLibro",true) && i.getBooleanExtra("iniciado",true)){
+            System.out.println("info");
+            Intent in = new Intent(this,InformacionLibroActivity.class);
+            in.putExtra("libro",i.getStringExtra("idNuevo"));
+            startActivity(in);
+        }
+        cursor.close();
+        myDB.close();
+        myDB1.close();
+    }
+
+    public void recargarLibros(){
+        SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
+        SQLiteDatabase myDB1 = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
+        Cursor cursor1 = null;
+        Cursor cursor = myDB.rawQuery("select * from autor",null);
+        while(cursor.moveToNext()){
+            autores.add(new Autor(cursor.getInt(0),cursor.getString(1)));
+        }
+        cursor = myDB.rawQuery("select l.id, l.isbn, l.titulo, l.sinopsis, l.hojas, l.id_portada, l.url," +
+                " l.en_posesion, l.deseado, l.leido, l.favorito, l.id_autor from libro l" ,null);
+        while(cursor.moveToNext()){
+            int id = cursor.getInt(0);
+            String isbn = cursor.getString(1);
+            String titulo = cursor.getString(2);
+            String sinopsis = cursor.getString(3);
+            int hojas = cursor.getInt(4);
+            int id_portada = cursor.getInt(5);
+            String url = cursor.getString(6);
+            boolean en_posesion = trueOrFalse(cursor.getInt(7));
+            boolean deseado = trueOrFalse(cursor.getInt(8));
+            boolean leido = trueOrFalse(cursor.getInt(9));
+            boolean favorito = trueOrFalse(cursor.getInt(10));
+            int id_autor = cursor.getInt(11);
+            Autor autor = new Autor();
+            for (Autor a: autores) {
+                if(id_autor == a.getId()){
+                    autor.setId(a.getId());
+                    autor.setNombre(a.getNombre());
+                    break;
+                }
+            }
+            ArrayList<Tematica> temas = new ArrayList<>();
+            Tematica tema = null;
+            cursor1= myDB1.rawQuery("select t.id, t.nombre from tematica t " +
+                    "inner join libro_tematica lt on t.id = lt.id_tematica " +
+                    "where lt.id_libro =  " + id,null);
+            while(cursor1.moveToNext()){
+                tema = new Tematica(cursor1.getInt(0),cursor1.getString(1));
+                temas.add(tema);
+            }
+            if(!tematicas.contains(tema)){
+                tematicas.add(tema);
+            }
+            Libro l = new Libro(id,isbn,titulo,sinopsis,hojas,id_portada,url,en_posesion,deseado,leido,favorito,autor,temas);
+            libros.add(l);
+        }
+        cursor.close();
+        myDB.close();
+        myDB1.close();
+        librosEnPosesion();
     }
 }

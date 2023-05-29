@@ -28,6 +28,8 @@ public class BusquedaActivity extends AppCompatActivity {
     EditText tNom;
     Spinner selectorautores;
     Spinner selectortematicas;
+    Spinner selectorBooleanos;
+    String[] nombresBooleanos = new String[5];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +42,17 @@ public class BusquedaActivity extends AppCompatActivity {
         this.tNom = findViewById(R.id.editTextBusquedaTitulo);
         this.selectorautores = (Spinner) findViewById(R.id.spinnerBusquedaAutor);
         this.selectortematicas = (Spinner) findViewById(R.id.spinnerBusquedaTematica);
+        this.selectorBooleanos = (Spinner) findViewById(R.id.spinnerBusquedaBooleanos);
 
         String[] nombresAutores = new String[autores.size()];
         String[] nombresTematicas = new String[tematicas.size()];
+        System.out.println("entrandoi");
+        nombresBooleanos[0] = "No seleccionado";
+        nombresBooleanos[1] = "En posesion";
+        nombresBooleanos[2] = "Leido";
+        nombresBooleanos[3] = "Lo quiero";
+        nombresBooleanos[4] = "Favorito";
+        System.out.println("entrandoi");
         for (int i = 0; i < autores.size(); i++){
             nombresAutores[i] = autores.get(i).getNombre();
         }
@@ -53,9 +63,12 @@ public class BusquedaActivity extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, nombresAutores);
         ArrayAdapter<String> adapterTematicas = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, nombresTematicas);
-
+        ArrayAdapter<String> adapterBooleanos = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, nombresBooleanos);
+        System.out.println("entrandoi");
         this.selectorautores.setAdapter(adapterAutor);
         this.selectortematicas.setAdapter(adapterTematicas);
+        this.selectorBooleanos.setAdapter(adapterBooleanos);
     }
 
     public void rellenarTematicas(){
@@ -95,15 +108,48 @@ public class BusquedaActivity extends AppCompatActivity {
             aut = true;
         }
 
+        if(tNom.length()>0){
+            if(aut){
+                consulta += " and l.titulo like '%" + tNom.getText().toString() + "%' ";
+            }else{
+                consulta += " where l.titulo like '%" + tNom.getText().toString()+ "%' ";
+                aut = true;
+            }
+        }
+
         if(selectorautores.getSelectedItemPosition()>0){
             idAutor = autores.get(selectorautores.getSelectedItemPosition()).getId();
             if(aut){
                 consulta += " and l.id_autor = " + idAutor;
             }else{
                 consulta += " where l.id_autor = " + idAutor;
+                aut = true;
             }
+        }
 
-
+        if(selectorBooleanos.getSelectedItemPosition()>0){
+            if(aut){
+                if(selectorBooleanos.getSelectedItemPosition() == 1){
+                    consulta += " and l.en_posesion = 1 ";
+                }else if(selectorBooleanos.getSelectedItemPosition() == 2){
+                    consulta += " and l.leido = 1 ";
+                }else if(selectorBooleanos.getSelectedItemPosition() == 3){
+                    consulta += " and l.deseado = 1 ";
+                }else if(selectorBooleanos.getSelectedItemPosition() == 4){
+                    consulta += " and l.favorito = 1 ";
+                }
+            }else{
+                if(selectorBooleanos.getSelectedItemPosition() == 1){
+                    consulta += " where l.en_posesion = 1 ";
+                }else if(selectorBooleanos.getSelectedItemPosition() == 2){
+                    consulta += " where l.leido = 1 ";
+                }else if(selectorBooleanos.getSelectedItemPosition() == 3){
+                    consulta += " where l.deseado = 1 ";
+                }else if(selectorBooleanos.getSelectedItemPosition() == 4){
+                    consulta += " where l.favorito = 1 ";
+                }
+                aut = true;
+            }
         }
         SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
         Cursor cursor = myDB.rawQuery(consulta,null);

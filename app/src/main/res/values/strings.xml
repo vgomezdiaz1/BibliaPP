@@ -30,4 +30,5 @@
     <string name="BusquedaLibroTematica">Tematica</string>
     <string name="BusquedaLibroAutor">Autor</string>
     <string name="BusquedaLibroButtonBuscar">Buscar</string>
+    <string name="BusquedaLibroBooleanos">Opciones</string>
 </resources>
