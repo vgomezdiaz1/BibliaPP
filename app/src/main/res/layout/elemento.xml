@@ -37,7 +37,7 @@
             android:text="TextView" />
 
         <TextView
-            android:id="@+id/textSinopsis"
+            android:id="@+id/textTematicas"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView" />

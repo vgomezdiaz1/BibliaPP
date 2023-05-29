@@ -3,6 +3,7 @@ package com.example.biblio;
 import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,7 +12,10 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.biblio.clases.Autor;
 import com.example.biblio.clases.Libro;
@@ -31,6 +35,9 @@ public class ListadoLibrosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado_libros);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("BibliApp");
+        setSupportActionBar(toolbar);
         Intent i = getIntent();
         this.u = new Usuario(i.getIntExtra("id",0),i.getStringExtra("username"), i.getStringExtra("mail")
                 , i.getStringExtra("nombre"),i.getStringExtra("apellido"),i.getStringExtra("contrasenya"));
@@ -111,6 +118,29 @@ public class ListadoLibrosActivity extends AppCompatActivity {
         rv.setAdapter(adaptador);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.leerISBNToolbar) {
+            addLibro();
+            return true;
+        } else if (id == R.id.buscarToolbar) {
+            buscarLibros();
+            return true;
+        } else if (id == R.id.cerrarSesionToolbar) {
+            cerrarSesion();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     static boolean trueOrFalse(int n){
         if(n==1){
             return true;
@@ -185,7 +215,7 @@ public class ListadoLibrosActivity extends AppCompatActivity {
         myDB.close();
     }
 
-    public void cerrarSesion(View v){
+    public void cerrarSesion(){
         SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
         myDB.delete("libro_tematica","",null);
         myDB.delete("libro","",null);
@@ -197,7 +227,7 @@ public class ListadoLibrosActivity extends AppCompatActivity {
         finish();
     }
 
-    public void addLibro(View v){
+    public void addLibro(){
         Intent i = new Intent(this, AddLibroActivity.class);
         i.putExtra("id", u.getId());
         i.putExtra("username", u.getUsername());
@@ -209,7 +239,7 @@ public class ListadoLibrosActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    public void buscarLibros(View v){
+    public void buscarLibros(){
         Intent i = new Intent(this, BusquedaActivity.class);
         startActivity(i);
     }

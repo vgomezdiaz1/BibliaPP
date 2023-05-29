@@ -35,7 +35,7 @@ public class MiAdaptador extends RecyclerView.Adapter<MiAdaptador.MyViewHolder> 
             img = itemView.findViewById(R.id.imagePortada);
             txtNombre = itemView.findViewById(R.id.textNombreLibro);
             txtAutor = itemView.findViewById(R.id.textAutor);
-            txtTematicas = itemView.findViewById(R.id.textSinopsis);
+            txtTematicas = itemView.findViewById(R.id.textTematicas);
             txtId = itemView.findViewById(R.id.textID);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
