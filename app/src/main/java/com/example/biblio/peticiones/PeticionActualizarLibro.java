@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.example.biblio.R;
+import com.example.biblio.clases.Mensaje;
 import com.example.biblio.clases.UsuarioLibro;
 
 import java.io.BufferedInputStream;
@@ -20,9 +21,11 @@ import java.net.URL;
 
 public class PeticionActualizarLibro extends Thread {
 
-    UsuarioLibro ul;
-    public PeticionActualizarLibro(UsuarioLibro ul){
-        this.ul = ul;
+    Mensaje men;
+    String mensaje;
+    public PeticionActualizarLibro(Mensaje men, String mensaje){
+        this.men = men;
+        this.mensaje = mensaje;
     }
 
     @Override
@@ -37,7 +40,7 @@ public class PeticionActualizarLibro extends Thread {
             conn.setRequestMethod("POST");
             conn.setConnectTimeout(5000);
             try(OutputStream os = conn.getOutputStream()) {
-                byte[] input = ul.toString().getBytes("utf-8");
+                byte[] input = men.codificarMensaje(mensaje).getBytes("utf-8");
                 os.write(input, 0, input.length);
             }catch(Exception e){
             }
@@ -49,7 +52,7 @@ public class PeticionActualizarLibro extends Thread {
                     while ((line = bufferedReader.readLine()) != null)
                         o += line;
                 }
-                ul.getUsuario().setId(-5);
+               // ul.getUsuario().setId(-5);
                 in.close();
             }else{
 

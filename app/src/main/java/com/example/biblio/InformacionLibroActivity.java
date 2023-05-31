@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.example.biblio.clases.Autor;
 import com.example.biblio.clases.Libro;
+import com.example.biblio.clases.Mensaje;
 import com.example.biblio.clases.Tematica;
 import com.example.biblio.clases.Usuario;
 import com.example.biblio.clases.UsuarioLibro;
@@ -139,7 +140,13 @@ public class InformacionLibroActivity extends AppCompatActivity implements Lifec
         UsuarioLibro ul = new UsuarioLibro(this.usuario, this.libro,
                 this.en_posesion.isChecked(), this.deseado.isChecked(),
                 this.leido.isChecked(), this.favorito.isChecked());
-        PeticionActualizarLibro p1 = new PeticionActualizarLibro(ul);
+        Mensaje men = null;
+        try{
+            men  = new Mensaje(this);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        PeticionActualizarLibro p1 = new PeticionActualizarLibro(men, ul.toString());
         p1.start();
         try {
             p1.join();
@@ -152,6 +159,8 @@ public class InformacionLibroActivity extends AppCompatActivity implements Lifec
                 SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
                 int c = myDB.update("libro", cv, "id = ? ", new String[]{this.libro.getId() + ""});
                 Toast.makeText(this, "Información actualizada", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(this, "No se ha podido actualizar la información", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             Toast.makeText(this, "No se ha podido actualizar la información", Toast.LENGTH_SHORT).show();
