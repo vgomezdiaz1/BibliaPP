@@ -146,7 +146,7 @@ public class InformacionLibroActivity extends AppCompatActivity implements Lifec
         }catch(Exception e){
             e.printStackTrace();
         }
-        PeticionActualizarLibro p1 = new PeticionActualizarLibro(men, ul.toString());
+        PeticionActualizarLibro p1 = new PeticionActualizarLibro(men, ul);
         p1.start();
         try {
             p1.join();

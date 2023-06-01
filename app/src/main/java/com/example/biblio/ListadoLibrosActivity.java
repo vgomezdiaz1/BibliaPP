@@ -17,6 +17,7 @@ import android.view.MenuItem;
 
 import com.example.biblio.clases.Autor;
 import com.example.biblio.clases.Libro;
+import com.example.biblio.clases.Mensaje;
 import com.example.biblio.clases.Tematica;
 import com.example.biblio.clases.Usuario;
 import com.example.biblio.peticiones.PeticionLibros;
@@ -45,7 +46,12 @@ public class ListadoLibrosActivity extends AppCompatActivity {
             cargarLibros(i);
             librosEnPosesion();
         }else{
-            PeticionLibros pl = new PeticionLibros(u,libros);
+            Mensaje men = null;
+            try {
+                men = new Mensaje(this);
+            } catch (Exception e) {
+            }
+            PeticionLibros pl = new PeticionLibros(men, u,libros);
             pl.start();
             try {
                 pl.join();

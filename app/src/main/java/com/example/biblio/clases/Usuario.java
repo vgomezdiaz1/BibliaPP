@@ -99,6 +99,12 @@ public class Usuario {
                 ", \"contrasenya\":\"" + contrasenya + '\"' +
                 '}';
     }
+
+    public String toStringInicioSesion() {
+        return  " \"username\":" + username +
+                " \"contrasenya\":" + contrasenya +
+                '}';
+    }
     public String toStringUsuarioLibro() {
         return  "\"id\":" + id +
                 ", \"username\":\"" + username + '\"' +

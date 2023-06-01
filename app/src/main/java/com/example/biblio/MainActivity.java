@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.biblio.clases.Mensaje;
 import com.example.biblio.clases.Usuario;
 import com.example.biblio.peticiones.PeticionInicioSesion;
 
@@ -97,7 +98,13 @@ public class MainActivity extends AppCompatActivity {
         TextView contra = findViewById(R.id.editTextContrasenya);
 
         Usuario u = new Usuario(nombre.getText().toString(), contra.getText().toString());
-        PeticionInicioSesion p = new PeticionInicioSesion(u);
+        Mensaje men = null;
+        try{
+            men  = new Mensaje(this);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        PeticionInicioSesion p = new PeticionInicioSesion(men,u);
         p.start();
         try {
             p.join(8000);

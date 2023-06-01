@@ -6,6 +6,7 @@ import android.util.JsonReader;
 import com.example.biblio.R;
 import com.example.biblio.clases.Autor;
 import com.example.biblio.clases.Libro;
+import com.example.biblio.clases.Mensaje;
 import com.example.biblio.clases.Tematica;
 import com.example.biblio.clases.Usuario;
 
@@ -19,9 +20,11 @@ import java.util.ArrayList;
 
 public class PeticionLibros extends Thread{
 
+    Mensaje men;
     Usuario usuario;
     ArrayList<Libro> libros = new ArrayList<>();
-    public PeticionLibros(Usuario usuario, ArrayList<Libro> libros){
+    public PeticionLibros(Mensaje men, Usuario usuario, ArrayList<Libro> libros){
+        this.men = men;
         this.usuario = usuario;
         this.libros = libros;
     }
@@ -33,11 +36,11 @@ public class PeticionLibros extends Thread{
         try {
             url = new URL("http://192.168.1.148:8080/BibliotecaAPI/resources/app/librosByUsuario");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("Content-Type", "text/plain");
             conn.setRequestProperty("Accept", "application/json");
             conn.setRequestMethod("POST");
             try(OutputStream os = conn.getOutputStream()) {
-                byte[] input = usuario.toString().getBytes("utf-8");
+                byte[] input = men.codificarMensaje(usuario.toString()).getBytes("utf-8");
                 os.write(input, 0, input.length);
             }catch(Exception e){
                 e.printStackTrace();
@@ -82,7 +85,7 @@ public class PeticionLibros extends Thread{
                 }
                 jr.endArray();
             }else{
-
+                System.out.println(conn.getResponseCode());
             }
         } catch (IOException e) {
             e.printStackTrace();
