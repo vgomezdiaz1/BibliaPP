@@ -4,17 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.biblio.clases.Autor;
 import com.example.biblio.clases.Libro;
@@ -221,7 +218,7 @@ public class BusquedaActivity extends AppCompatActivity {
             this.libros.add(l);
         }
         cursor.close();
-        RecyclerView rv = findViewById(R.id.listaBusquedaLibros);
+        RecyclerView rv = findViewById(R.id.listaBusquedaButton);
         rv.setHasFixedSize(true);
 
         RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
@@ -287,6 +284,7 @@ public class BusquedaActivity extends AppCompatActivity {
                 aut = true;
             }
         }
+        System.out.println(consulta);
         SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
         Cursor cursor = myDB.rawQuery(consulta,null);
         Cursor cursor1 = null;
@@ -322,7 +320,7 @@ public class BusquedaActivity extends AppCompatActivity {
             this.libros.add(l);
         }
         cursor.close();
-        RecyclerView rv = findViewById(R.id.listaBusquedaLibros);
+        RecyclerView rv = findViewById(R.id.listaBusquedaButton);
         rv.setHasFixedSize(true);
 
         RecyclerView.LayoutManager lm = new LinearLayoutManager(this);

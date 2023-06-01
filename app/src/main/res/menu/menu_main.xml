@@ -10,11 +10,7 @@
         android:orderInCategory="100"
         android:title="Cerrar sesion"
         app:showAsAction="never" />
-    <item
-        android:id="@+id/VerTodoToolbar"
-        android:orderInCategory="100"
-        android:title="Ver todos los buscados"
-        app:showAsAction="never" />
+
     <item
         android:id="@+id/leerISBNToolbar"
         android:orderInCategory="200"

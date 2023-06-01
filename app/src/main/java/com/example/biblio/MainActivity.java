@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             usuario.setContrasenya(cursor.getString(5));
         }
         if(usuario.getUsername()!= null){
-            Intent i = new Intent(this, ListadoLibrosActivity.class);
+            Intent i = new Intent(this, ListadoBotonesActivity.class);
             i.putExtra("id", usuario.getId());
             i.putExtra("username", usuario.getUsername());
             i.putExtra("nombre", usuario.getNombre());

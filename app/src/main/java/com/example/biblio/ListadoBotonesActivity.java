@@ -1,7 +1,5 @@
 package com.example.biblio;
 
-import static android.database.sqlite.SQLiteDatabase.openOrCreateDatabase;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,35 +22,66 @@ import com.example.biblio.peticiones.PeticionLibros;
 
 import java.util.ArrayList;
 
-public class ListadoLibrosActivity extends AppCompatActivity {
+public class ListadoBotonesActivity extends AppCompatActivity {
 
     ArrayList<Libro> libros = new ArrayList<>();
+    ArrayList<Libro> librosEnPosesion = new ArrayList<>();
     ArrayList<Autor> autores = new ArrayList<>();
     ArrayList<Tematica> tematicas = new ArrayList<>();
     Usuario u;
-    Toolbar toolbar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_listado_libros);
-        cargarUsuario();
-        toolbar = findViewById(R.id.toolbar);
+        setContentView(R.layout.activity_listado_botones);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("BibliApp");
         toolbar.setTitleTextColor(0xffffffff);
         setSupportActionBar(toolbar);
         Intent i = getIntent();
-        cargarLibros(i);
-        System.out.println(this.libros.size());
-        System.out.println(this.autores.size());
-        System.out.println(this.tematicas.size());
+        this.u = new Usuario(i.getIntExtra("id",0),i.getStringExtra("username"), i.getStringExtra("mail")
+                , i.getStringExtra("nombre"),i.getStringExtra("apellido"),i.getStringExtra("contrasenya"));
+        if(i.getBooleanExtra("iniciado",false)){
+            cargarLibros(i);
+            librosEnPosesion();
+        }else{
+            Mensaje men = null;
+            try {
+                men = new Mensaje(this);
+            } catch (Exception e) {
+            }
+            PeticionLibros pl = new PeticionLibros(men, u,libros);
+            pl.start();
+            try {
+                pl.join();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            guardarDatosLibros(libros);
+            guardarDatosAutores(libros, autores);
+            guardarDatosTematicas(libros);
+        }
+        ArrayList<String> nombres = new ArrayList<>();
+        nombres.add("Leido");
+        nombres.add("Posesion");
+        nombres.add("Deseado");
+        nombres.add("Favorito");
         RecyclerView rv = findViewById(R.id.listaBusquedaButton);
         rv.setHasFixedSize(true);
 
         RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
         rv.setLayoutManager(lm);
 
-        MiAdaptador adaptador = new MiAdaptador(this.libros);
+        MiAdaptadorBotones adaptador = new MiAdaptadorBotones(nombres);
         rv.setAdapter(adaptador);
+    }
+
+    static boolean trueOrFalse(int n){
+        if(n==1){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     @Override
@@ -77,12 +106,70 @@ public class ListadoLibrosActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    static boolean trueOrFalse(int n){
-        if(n==1){
-            return true;
-        }else{
-            return false;
+    public void guardarDatosLibros(ArrayList<Libro> libros){
+        SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
+        for (Libro li: libros) {
+            ContentValues cv = new ContentValues();
+            cv.put("id", li.getId());
+            cv.put("isbn",li.getIsbn());
+            cv.put("titulo", li.getTitulo());
+            cv.put("sinopsis", li.getSinopsis());
+            cv.put("hojas", li.getHojas());
+            cv.put("id_portada", li.getId_portada());
+            cv.put("url",li.getUrl());
+            cv.put("en_posesion", li.isEn_posesion());
+            cv.put("deseado", li.isDeseado());
+            cv.put("leido",li.isLeido());
+            cv.put("favorito", li.isFavorito());
+            cv.put("id_autor", li.getAutor().getId());
+            myDB.insert("libro",null, cv);
         }
+        myDB.close();
+    }
+
+    public void guardarDatosAutores(ArrayList<Libro> libros, ArrayList<Autor> autores){
+        ArrayList<Integer> lista = new ArrayList<>();
+        for (Libro li: libros) {
+            if(!lista.contains(li.getAutor().getId())){
+                lista.add(li.getAutor().getId());
+                autores.add(li.getAutor());
+            }
+        }
+        SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
+        for (Autor a: autores) {
+            ContentValues cv = new ContentValues();
+            cv.put("id", a.getId());
+            cv.put("nombre",a.getNombre());
+            myDB.insert("autor",null, cv);
+        }
+        myDB.close();
+    }
+
+    public void guardarDatosTematicas(ArrayList<Libro> libros){
+        ArrayList<Tematica> tematicas = new ArrayList<>();
+        for (Libro li: libros) {
+            for (Tematica te: li.getTematica()) {
+                if(!tematicas.contains(te)){
+                    tematicas.add(te);
+                }
+            }
+        }
+        SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
+        for (Tematica a: tematicas) {
+            ContentValues cv = new ContentValues();
+            cv.put("id", a.getId());
+            cv.put("nombre",a.getNombre());
+            myDB.insert("tematica",null, cv);
+        }
+        for (Libro li: libros) {
+            for (Tematica te: li.getTematica()) {
+                ContentValues cv = new ContentValues();
+                cv.put("id_libro", li.getId());
+                cv.put("id_tematica",te.getId());
+                myDB.insert("libro_tematica",null, cv);
+            }
+        }
+        myDB.close();
     }
 
     public void cerrarSesion(){
@@ -114,34 +201,24 @@ public class ListadoLibrosActivity extends AppCompatActivity {
         startActivity(i);
     }
 
+    public void librosEnPosesion(){
+        for (Libro l: this.libros) {
+            if(l.isEn_posesion()){
+                this.librosEnPosesion.add(l);
+            }
+        }
+    }
+
     public void cargarLibros(Intent i){
-        String ileido =  i.getIntExtra("Leido",0) + "";
-        String iposesion =  i.getIntExtra("Posesion",0) + "";
-        String ideseado =  i.getIntExtra("Deseado",0) + "";
-        String ifavorito =  i.getIntExtra("Favorito",0) + "";
         SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
         SQLiteDatabase myDB1 = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
         Cursor cursor1 = null;
         Cursor cursor = myDB.rawQuery("select * from autor",null);
         while(cursor.moveToNext()){
-            this.autores.add(new Autor(cursor.getInt(0),cursor.getString(1)));
+            autores.add(new Autor(cursor.getInt(0),cursor.getString(1)));
         }
-        String sql = "select l.id, l.isbn, l.titulo, l.sinopsis, l.hojas, l.id_portada, l.url," +
-                " l.en_posesion, l.deseado, l.leido, l.favorito, l.id_autor from libro l";
-        if(ileido.equals("1")){
-            toolbar.setTitle("Leido por " + u.getUsername());
-            sql += " where l.leido = 1 ";
-        }else if(iposesion.equals("1")){
-            toolbar.setTitle("Posesion de " + u.getUsername() );
-            sql += " where l.en_posesion = 1 ";
-        }else if(ideseado.equals("1")){
-            toolbar.setTitle("Deseado por " + u.getUsername());
-            sql += " where l.deseado = 1 ";
-        }else if(ifavorito.equals("1")){
-            toolbar.setTitle("Fav de " + u.getUsername());
-            sql += " where l.favorito = 1 ";
-        }
-        cursor = myDB.rawQuery(sql , null);
+        cursor = myDB.rawQuery("select l.id, l.isbn, l.titulo, l.sinopsis, l.hojas, l.id_portada, l.url," +
+                " l.en_posesion, l.deseado, l.leido, l.favorito, l.id_autor from libro l" ,null);
         while(cursor.moveToNext()){
             int id = cursor.getInt(0);
             String isbn = cursor.getString(1);
@@ -173,29 +250,19 @@ public class ListadoLibrosActivity extends AppCompatActivity {
                 temas.add(tema);
             }
             if(!tematicas.contains(tema)){
-                this.tematicas.add(tema);
+                tematicas.add(tema);
             }
             Libro l = new Libro(id,isbn,titulo,sinopsis,hojas,id_portada,url,en_posesion,deseado,leido,favorito,autor,temas);
-            this.libros.add(l);
+            libros.add(l);
+        }
+        if(i.getBooleanExtra("seleccionarLibro",true) && i.getBooleanExtra("iniciado",true)){
+            System.out.println("info");
+            Intent in = new Intent(this,InformacionLibroActivity.class);
+            in.putExtra("libro",i.getStringExtra("idNuevo"));
+            startActivity(in);
         }
         cursor.close();
         myDB.close();
         myDB1.close();
-    }
-
-    public void cargarUsuario(){
-        SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
-        Cursor cursor = myDB.rawQuery("select * from usuario",null);
-        while(cursor.moveToNext()){
-            int id = cursor.getInt(0);
-            String username = cursor.getString(1);
-            String nombre = cursor.getString(2);
-            String mail = cursor.getString(3);
-            String apellido = cursor.getString(4);
-            String contrasenya = cursor.getString(5);
-            this.u = new Usuario(id,username,nombre,mail,apellido,contrasenya);
-        }
-        cursor.close();
-        myDB.close();
     }
 }
