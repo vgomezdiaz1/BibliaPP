@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "Usuario o contraseña incorrecta", Toast.LENGTH_SHORT).show();
         }else{
             guardarUsuario(u);
-            Intent i = new Intent(this, ListadoLibrosActivity.class);
+            Intent i = new Intent(this, ListadoBotonesActivity.class);
             i.putExtra("id", u.getId());
             i.putExtra("username", u.getUsername());
             i.putExtra("nombre", u.getNombre());

@@ -53,6 +53,7 @@ public class ListadoBotonesActivity extends AppCompatActivity {
             PeticionLibros pl = new PeticionLibros(men, u,libros);
             pl.start();
             try {
+                System.out.println("pido libros");
                 pl.join();
             }catch(Exception e){
                 e.printStackTrace();
