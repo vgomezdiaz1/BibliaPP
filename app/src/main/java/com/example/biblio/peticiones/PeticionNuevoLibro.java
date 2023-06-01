@@ -6,6 +6,7 @@ import android.util.Log;
 import com.example.biblio.R;
 import com.example.biblio.clases.Autor;
 import com.example.biblio.clases.Libro;
+import com.example.biblio.clases.Mensaje;
 import com.example.biblio.clases.Tematica;
 import com.example.biblio.clases.Usuario;
 
@@ -20,10 +21,12 @@ import java.util.Date;
 
 public class PeticionNuevoLibro  extends Thread{
 
+    Mensaje men;
     int id_usuario;
     String isbn;
     ArrayList<Libro> libro;
-    public PeticionNuevoLibro(int id_usuario, String isbn, ArrayList<Libro> libro){
+    public PeticionNuevoLibro(Mensaje men, int id_usuario, String isbn, ArrayList<Libro> libro){
+        this.men = men;
         this.id_usuario = id_usuario;
         this.isbn = isbn;
         this.libro = libro;
@@ -37,9 +40,10 @@ public class PeticionNuevoLibro  extends Thread{
             url = new URL("http://192.168.1.148:8080/BibliotecaAPI/resources/app/nuevoLibro");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestProperty("Content-Type", "text/plain");
+            conn.setRequestProperty("Accept", "application/json");
             conn.setRequestMethod("POST");
             try(OutputStream os = conn.getOutputStream()) {
-                byte[] input = envio.getBytes("utf-8");
+                byte[] input = men.codificarMensaje(envio).getBytes("utf-8");
                 os.write(input, 0, input.length);
             }catch(Exception e){
                 e.printStackTrace();

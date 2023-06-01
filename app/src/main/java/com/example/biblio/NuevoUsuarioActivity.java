@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.biblio.clases.Mensaje;
 import com.example.biblio.clases.Usuario;
 import com.example.biblio.peticiones.PeticionNuevoUsuario;
 
@@ -35,8 +36,14 @@ public class NuevoUsuarioActivity extends AppCompatActivity {
         }else if(!contra1.equals(contra2)){
             Toast.makeText(this, "Las contraseñas deben de coincidir", Toast.LENGTH_SHORT).show();
         }else{
+            Mensaje men = null;
+            try{
+                men  = new Mensaje(this);
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
             u = new Usuario(email, nombre, apellido, contra1);
-            PeticionNuevoUsuario p = new PeticionNuevoUsuario(u);
+            PeticionNuevoUsuario p = new PeticionNuevoUsuario(men,u);
             p.start();
             try {
                 p.join();
@@ -44,7 +51,7 @@ public class NuevoUsuarioActivity extends AppCompatActivity {
                 ex.printStackTrace();
             }
             if(u.getId()!=0){
-                System.out.println(u.toString());
+                Toast.makeText(this, "Usuario creado", Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(this, "Error al crear usuario", Toast.LENGTH_SHORT).show();
             }

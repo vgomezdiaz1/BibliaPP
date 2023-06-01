@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.biblio.clases.Autor;
 import com.example.biblio.clases.Libro;
+import com.example.biblio.clases.Mensaje;
 import com.example.biblio.clases.Tematica;
 import com.example.biblio.clases.Usuario;
 import com.example.biblio.databinding.ActivityAddLibroBinding;
@@ -57,7 +58,13 @@ public class AddLibroActivity extends AppCompatActivity {
     public void botonBuscarISBN(View v){
         TextView nombre = findViewById(R.id.editTextAddLibroISBN);
         String isbn = nombre.getText().toString();
-        PeticionNuevoLibro p1 = new PeticionNuevoLibro(u.getId(), isbn, libro);
+        Mensaje men = null;
+        try{
+            men  = new Mensaje(this);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        PeticionNuevoLibro p1 = new PeticionNuevoLibro(men,u.getId(), isbn, libro);
         p1.start();
         try{
             p1.join();
