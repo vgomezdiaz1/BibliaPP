@@ -75,6 +75,7 @@ public class PeticionInicioSesion extends Thread{
                 }catch (Exception e){
                     e.printStackTrace();
                 }
+                System.out.println(devolucion);
                 devolucion = devolucion.substring(7);
                 System.out.println(devolucion);
                 byte[] bytes = devolucion.getBytes(StandardCharsets.UTF_8);

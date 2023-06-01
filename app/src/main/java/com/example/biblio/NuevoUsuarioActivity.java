@@ -52,6 +52,7 @@ public class NuevoUsuarioActivity extends AppCompatActivity {
             }
             if(u.getId()!=0){
                 Toast.makeText(this, "Usuario creado", Toast.LENGTH_SHORT).show();
+                finish();
             }else{
                 Toast.makeText(this, "Error al crear usuario", Toast.LENGTH_SHORT).show();
             }
