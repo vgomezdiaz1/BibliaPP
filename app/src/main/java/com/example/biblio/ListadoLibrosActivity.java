@@ -35,16 +35,23 @@ public class ListadoLibrosActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listado_libros);
+        Intent i = getIntent();
+        if(i.getBooleanExtra("seleccionarLibro", true)){
+            Intent in = new Intent(this,InformacionLibroActivity.class);
+            int idRespuesta = i.getIntExtra("idLibro",-1);
+            System.out.println("id respuesta " + idRespuesta);
+            if(idRespuesta > 0){
+                in.putExtra("libro",idRespuesta+"");
+                startActivity(in);
+            }
+        }
         cargarUsuario();
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("BibliApp");
         toolbar.setTitleTextColor(0xffffffff);
         setSupportActionBar(toolbar);
-        Intent i = getIntent();
+
         cargarLibros(i);
-        System.out.println(this.libros.size());
-        System.out.println(this.autores.size());
-        System.out.println(this.tematicas.size());
         RecyclerView rv = findViewById(R.id.listaBusquedaButton);
         rv.setHasFixedSize(true);
 

@@ -76,8 +76,9 @@ public class AddLibroActivity extends AppCompatActivity {
             guardarDatosLibros(libro);
             guardarDatosAutores(libro);
             guardarDatosTematicas(libro);
-            Toast.makeText(this, "Libro guardado", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getBaseContext(), "Libro guardado", Toast.LENGTH_LONG).show();
             Intent i = new Intent(this, ListadoLibrosActivity.class);
+            i.putExtra("idLibro", libro.get(0).getId());
             i.putExtra("id", u.getId());
             i.putExtra("username", u.getUsername());
             i.putExtra("nombre", u.getNombre());
@@ -89,8 +90,10 @@ public class AddLibroActivity extends AppCompatActivity {
             i.putExtra("idNuevo", libro.get(0).getId() + "");
             startActivity(i);
             finish();
+        }else if(libro.size()==0){
+            Toast.makeText(this, "El ISBN no existe en la base de datos", Toast.LENGTH_LONG).show();
         }else{
-            Toast.makeText(this, "ISBN incorrecto", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "No hay conexion con el servidor", Toast.LENGTH_LONG).show();
         }
     }
 

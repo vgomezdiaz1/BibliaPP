@@ -1,7 +1,9 @@
 package com.example.biblio.peticiones;
 
+import android.content.Context;
 import android.util.JsonReader;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.biblio.R;
 import com.example.biblio.clases.Autor;
@@ -92,11 +94,12 @@ public class PeticionNuevoLibro  extends Thread{
                         jr.endArray();
                     }
                     jr.endArray();
+
                 }catch (Exception e){
                     e.printStackTrace();
                 }
             }else{
-
+                System.out.println(conn.getResponseCode());
             }
         } catch (IOException e) {
             e.printStackTrace();
