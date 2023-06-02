@@ -10,5 +10,11 @@
         android:id="@+id/buttonSeleccionable"
         android:layout_width="match_parent"
         android:layout_height="140dp"
-        android:text="Button" />
+        android:background="@drawable/boton_basico_removebg_preview__1_"
+        android:fallbackLineSpacing="false"
+        android:hapticFeedbackEnabled="false"
+        android:textAlignment="textEnd"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold" />
 </LinearLayout>
