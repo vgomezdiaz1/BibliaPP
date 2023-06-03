@@ -58,48 +58,54 @@ public class AddLibroActivity extends AppCompatActivity {
     public void botonBuscarISBN(View v){
         TextView nombre = findViewById(R.id.editTextAddLibroISBN);
         String isbn = nombre.getText().toString();
-        Mensaje men = null;
-        try{
-            men  = new Mensaje(this);
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        PeticionNuevoLibro p1 = new PeticionNuevoLibro(men,u, isbn, libro);
-        p1.start();
-        try{
-            p1.join();
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-        if(libro.size()>0){
-            guardarDatosLibros(libro);
-            guardarDatosAutores(libro);
-            guardarDatosTematicas(libro);
-            Toast.makeText(this.getBaseContext(), "Libro guardado", Toast.LENGTH_LONG).show();
-            Intent i = new Intent(this, ListadoLibrosActivity.class);
-            i.putExtra("idLibro", libro.get(0).getId());
-            i.putExtra("id", u.getId());
-            i.putExtra("username", u.getUsername());
-            i.putExtra("nombre", u.getNombre());
-            i.putExtra("mail", u.getMail());
-            i.putExtra("apellido", u.getApellido());
-            i.putExtra("contrasenya", u.getContrasenya());
-            i.putExtra("iniciado",true);
-            i.putExtra("seleccionarLibro", true);
-            i.putExtra("idNuevo", libro.get(0).getId() + "");
-            startActivity(i);
-            finish();
-        }else if(u.getApellido().equals("404")){
-            Toast.makeText(this, "El ISBN no existe en la base de datos", Toast.LENGTH_LONG).show();
+        if (nombre.length() >= 9 && comprobarISBN(isbn)) {
+            Mensaje men = null;
+            try{
+                men  = new Mensaje(this);
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            PeticionNuevoLibro p1 = new PeticionNuevoLibro(men,u, isbn, libro);
+            p1.start();
+            try{
+                p1.join();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+            if(libro.size()>0){
+                guardarDatosLibros(libro);
+                guardarDatosAutores(libro);
+                guardarDatosTematicas(libro);
+                Toast.makeText(this.getBaseContext(), "Libro guardado", Toast.LENGTH_LONG).show();
+                Intent i = new Intent(this, ListadoLibrosActivity.class);
+                i.putExtra("idLibro", libro.get(0).getId());
+                i.putExtra("id", u.getId());
+                i.putExtra("username", u.getUsername());
+                i.putExtra("nombre", u.getNombre());
+                i.putExtra("mail", u.getMail());
+                i.putExtra("apellido", u.getApellido());
+                i.putExtra("contrasenya", u.getContrasenya());
+                i.putExtra("iniciado",true);
+                i.putExtra("seleccionarLibro", true);
+                i.putExtra("idNuevo", libro.get(0).getId() + "");
+                startActivity(i);
+                finish();
+            }else if(u.getApellido().equals("404")){
+                Toast.makeText(this, "El ISBN no existe en la base de datos", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(this, "No hay conexion con el servidor", Toast.LENGTH_LONG).show();
+            }
         }else{
-            Toast.makeText(this, "No hay conexion con el servidor", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "El ISBN no es valido", Toast.LENGTH_LONG).show();
         }
     }
 
-    static boolean trueOrFalse(int n){
-        if(n==1){
+    public boolean comprobarISBN(String isbn){
+        try{
+            float prueba = Float.parseFloat(isbn);
             return true;
-        }else{
+        } catch(Exception e){
+            e.printStackTrace();
             return false;
         }
     }
