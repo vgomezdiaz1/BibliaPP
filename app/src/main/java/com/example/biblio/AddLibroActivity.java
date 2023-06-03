@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,8 @@ public class AddLibroActivity extends AppCompatActivity {
     ArrayList<Libro> libro = new ArrayList<>();
 
     ActivityAddLibroBinding bindign;
+
+    ProgressBar buscando;
     private final ActivityResultLauncher<ScanOptions> codigoBarras = registerForActivityResult(new ScanContract(), result ->{
         if(result.getContents() == null){
             Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show();
@@ -46,7 +50,8 @@ public class AddLibroActivity extends AppCompatActivity {
                 , i.getStringExtra("nombre"),i.getStringExtra("apellido"),i.getStringExtra("contrasenya"));
         bindign = ActivityAddLibroBinding.inflate(getLayoutInflater());
         setContentView(bindign.getRoot());
-
+        buscando = findViewById(R.id.progressBar);
+        buscando.setVisibility(View.INVISIBLE);
         bindign.buttonActiuvarCamara.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,7 +63,8 @@ public class AddLibroActivity extends AppCompatActivity {
     public void botonBuscarISBN(View v){
         TextView nombre = findViewById(R.id.editTextAddLibroISBN);
         String isbn = nombre.getText().toString();
-        if (nombre.length() >= 9 && comprobarISBN(isbn)) {
+        if (nombre.length() >= 9 && nombre.length() <= 13 && comprobarISBN(isbn)) {
+            buscando.setVisibility(View.VISIBLE);
             Mensaje men = null;
             try{
                 men  = new Mensaje(this);
@@ -98,6 +104,7 @@ public class AddLibroActivity extends AppCompatActivity {
         }else{
             Toast.makeText(this, "El ISBN no es valido", Toast.LENGTH_LONG).show();
         }
+        buscando.setVisibility(View.INVISIBLE);
     }
 
     public boolean comprobarISBN(String isbn){

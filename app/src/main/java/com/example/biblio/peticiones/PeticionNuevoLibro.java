@@ -44,7 +44,7 @@ public class PeticionNuevoLibro  extends Thread{
             conn.setRequestProperty("Content-Type", "text/plain");
             conn.setRequestProperty("Accept", "application/json");
             conn.setRequestMethod("POST");
-            conn.setConnectTimeout(3000);
+            conn.setConnectTimeout(8000);
             try(OutputStream os = conn.getOutputStream()) {
                 byte[] input = men.codificarMensaje(envio).getBytes("utf-8");
                 os.write(input, 0, input.length);
