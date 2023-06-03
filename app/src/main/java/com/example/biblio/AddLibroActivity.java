@@ -26,7 +26,7 @@ import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.util.ArrayList;
 
-public class AddLibroActivity extends AppCompatActivity {
+public class AddLibroActivity extends AppCompatActivity{
 
     Usuario u;
     ArrayList<Libro> libro = new ArrayList<>();
@@ -68,12 +68,8 @@ public class AddLibroActivity extends AppCompatActivity {
             Mensaje men = null;
             try{
                 men  = new Mensaje(this);
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-            PeticionNuevoLibro p1 = new PeticionNuevoLibro(men,u, isbn, libro);
-            p1.start();
-            try{
+                PeticionNuevoLibro p1 = new PeticionNuevoLibro(men, u, isbn, libro);
+                p1.start();
                 p1.join();
             }catch(Exception e){
                 e.printStackTrace();
