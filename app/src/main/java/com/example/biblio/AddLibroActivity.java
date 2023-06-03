@@ -64,14 +64,13 @@ public class AddLibroActivity extends AppCompatActivity {
         }catch(Exception e){
             e.printStackTrace();
         }
-        PeticionNuevoLibro p1 = new PeticionNuevoLibro(men,u.getId(), isbn, libro);
+        PeticionNuevoLibro p1 = new PeticionNuevoLibro(men,u, isbn, libro);
         p1.start();
         try{
             p1.join();
         }catch(Exception e){
             e.printStackTrace();
         }
-        System.out.println(libro.size());
         if(libro.size()>0){
             guardarDatosLibros(libro);
             guardarDatosAutores(libro);
@@ -90,7 +89,7 @@ public class AddLibroActivity extends AppCompatActivity {
             i.putExtra("idNuevo", libro.get(0).getId() + "");
             startActivity(i);
             finish();
-        }else if(libro.size()==0){
+        }else if(u.getApellido().equals("404")){
             Toast.makeText(this, "El ISBN no existe en la base de datos", Toast.LENGTH_LONG).show();
         }else{
             Toast.makeText(this, "No hay conexion con el servidor", Toast.LENGTH_LONG).show();

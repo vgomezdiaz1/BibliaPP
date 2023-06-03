@@ -63,10 +63,10 @@ public class ListadoBotonesActivity extends AppCompatActivity {
             guardarDatosTematicas(libros);
         }
         ArrayList<String> nombres = new ArrayList<>();
-        nombres.add("Leido");
-        nombres.add("Posesion");
-        nombres.add("Deseado");
-        nombres.add("Favorito");
+        nombres.add("Lo he Leido");
+        nombres.add("Lo tengo");
+        nombres.add("Lo quiero");
+        nombres.add("Mis Favoritos");
         RecyclerView rv = findViewById(R.id.listaBusquedaButton);
         rv.setHasFixedSize(true);
 

@@ -35,13 +35,13 @@ public class MiAdaptadorBotones extends RecyclerView.Adapter<MiAdaptadorBotones.
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(itemView.getContext(),ListadoLibrosActivity.class);
-                    if(nombre.getText().equals("Leido")){
+                    if(nombre.getText().equals("Lo he Leido")){
                         i.putExtra("Leido",1);
-                    }else if(nombre.getText().equals("Posesion")){
+                    }else if(nombre.getText().equals("Lo tengo")){
                         i.putExtra("Posesion",1);
-                    }else if(nombre.getText().equals("Deseado")){
+                    }else if(nombre.getText().equals("Lo quiero")){
                         i.putExtra("Deseado",1);
-                    }else if(nombre.getText().equals("Favorito")){
+                    }else if(nombre.getText().equals("Mis Favoritos")){
                         i.putExtra("Favorito",1);
                     }
                     itemView.getContext().startActivity(i);

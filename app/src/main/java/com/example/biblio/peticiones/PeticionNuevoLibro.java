@@ -24,12 +24,12 @@ import java.util.Date;
 public class PeticionNuevoLibro  extends Thread{
 
     Mensaje men;
-    int id_usuario;
+    Usuario usuario;
     String isbn;
     ArrayList<Libro> libro;
-    public PeticionNuevoLibro(Mensaje men, int id_usuario, String isbn, ArrayList<Libro> libro){
+    public PeticionNuevoLibro(Mensaje men, Usuario usuario, String isbn, ArrayList<Libro> libro){
         this.men = men;
-        this.id_usuario = id_usuario;
+        this.usuario = usuario;
         this.isbn = isbn;
         this.libro = libro;
     }
@@ -37,13 +37,14 @@ public class PeticionNuevoLibro  extends Thread{
     public void run() {
         super.run();
         URL url = null;
-        String envio = "{id_usuario:"+ id_usuario + ",isbn:" + this.isbn + " }";
+        String envio = "{id_usuario:"+ usuario.getId() + ",isbn:" + this.isbn + " }";
         try {
             url = new URL("http://192.168.1.148:8080/BibliotecaAPI/resources/app/nuevoLibro");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestProperty("Content-Type", "text/plain");
             conn.setRequestProperty("Accept", "application/json");
             conn.setRequestMethod("POST");
+            conn.setConnectTimeout(3000);
             try(OutputStream os = conn.getOutputStream()) {
                 byte[] input = men.codificarMensaje(envio).getBytes("utf-8");
                 os.write(input, 0, input.length);
@@ -94,12 +95,13 @@ public class PeticionNuevoLibro  extends Thread{
                         jr.endArray();
                     }
                     jr.endArray();
-
                 }catch (Exception e){
-                    e.printStackTrace();
+                    usuario.setApellido("0");
                 }
             }else{
-                System.out.println(conn.getResponseCode());
+                if(conn.getResponseCode() != 0){
+                    usuario.setApellido("404");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
