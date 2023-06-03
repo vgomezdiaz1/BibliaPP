@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
@@ -66,21 +67,10 @@ public class AddLibroActivity extends AppCompatActivity{
         if (nombre.length() >= 9 && nombre.length() <= 13 && comprobarISBN(isbn)) {
             buscando.setVisibility(View.VISIBLE);
             Mensaje men = null;
-            try{
-                men  = new Mensaje(this);
-                PeticionNuevoLibro p1 = new PeticionNuevoLibro(men, u, isbn, libro);
-                p1.start();
-                p1.join();
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-            if(libro.size()>0){
-                guardarDatosLibros(libro);
-                guardarDatosAutores(libro);
-                guardarDatosTematicas(libro);
-                Toast.makeText(this.getBaseContext(), "Libro guardado", Toast.LENGTH_LONG).show();
+            int idLibroBuscado = buscarLibroPorISBN(isbn);
+            if(idLibroBuscado != 0){
                 Intent i = new Intent(this, ListadoLibrosActivity.class);
-                i.putExtra("idLibro", libro.get(0).getId());
+                i.putExtra("idLibro", idLibroBuscado);
                 i.putExtra("id", u.getId());
                 i.putExtra("username", u.getUsername());
                 i.putExtra("nombre", u.getNombre());
@@ -89,13 +79,41 @@ public class AddLibroActivity extends AppCompatActivity{
                 i.putExtra("contrasenya", u.getContrasenya());
                 i.putExtra("iniciado",true);
                 i.putExtra("seleccionarLibro", true);
-                i.putExtra("idNuevo", libro.get(0).getId() + "");
+                i.putExtra("idNuevo", idLibroBuscado + "");
                 startActivity(i);
                 finish();
-            }else if(u.getApellido().equals("404")){
-                Toast.makeText(this, "El ISBN no existe en la base de datos", Toast.LENGTH_LONG).show();
             }else{
-                Toast.makeText(this, "No hay conexion con el servidor", Toast.LENGTH_LONG).show();
+                try{
+                    men  = new Mensaje(this);
+                    PeticionNuevoLibro p1 = new PeticionNuevoLibro(men, u, isbn, libro);
+                    p1.start();
+                    p1.join();
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+                if(libro.size()>0){
+                    guardarDatosLibros(libro);
+                    guardarDatosAutores(libro);
+                    guardarDatosTematicas(libro);
+                    Toast.makeText(this.getBaseContext(), "Libro guardado", Toast.LENGTH_LONG).show();
+                    Intent i = new Intent(this, ListadoLibrosActivity.class);
+                    i.putExtra("idLibro", libro.get(0).getId());
+                    i.putExtra("id", u.getId());
+                    i.putExtra("username", u.getUsername());
+                    i.putExtra("nombre", u.getNombre());
+                    i.putExtra("mail", u.getMail());
+                    i.putExtra("apellido", u.getApellido());
+                    i.putExtra("contrasenya", u.getContrasenya());
+                    i.putExtra("iniciado",true);
+                    i.putExtra("seleccionarLibro", true);
+                    i.putExtra("idNuevo", libro.get(0).getId() + "");
+                    startActivity(i);
+                    finish();
+                }else if(u.getApellido().equals("404")){
+                    Toast.makeText(this, "El ISBN no existe en la base de datos", Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(this, "No hay conexion con el servidor", Toast.LENGTH_LONG).show();
+                }
             }
         }else{
             Toast.makeText(this, "El ISBN no es valido", Toast.LENGTH_LONG).show();
@@ -188,5 +206,16 @@ public class AddLibroActivity extends AppCompatActivity{
         options.setCaptureActivity(CaptureActivityPortraint.class);
         options.setBarcodeImageEnabled(false);
         codigoBarras.launch(options);
+    }
+
+    public int buscarLibroPorISBN(String isbn){
+        int id_libro = 0;
+        SQLiteDatabase myDB = openOrCreateDatabase(getResources().getString(R.string.db), MODE_PRIVATE, null);
+        Cursor cursor = myDB.rawQuery("select id from libro where isbn = " + isbn, null);
+        int id_autor = 0;
+        while (cursor.moveToNext()) {
+            id_libro = cursor.getInt(0);
+        }
+        return id_libro;
     }
 }
