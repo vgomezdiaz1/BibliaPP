@@ -111,8 +111,10 @@ public class AddLibroActivity extends AppCompatActivity{
                     finish();
                 }else if(u.getApellido().equals("404")){
                     Toast.makeText(this, "El ISBN no existe en la base de datos", Toast.LENGTH_LONG).show();
+                    u.setApellido(u.getApellido().substring(0,u.getApellido().length()-3));
                 }else{
                     Toast.makeText(this, "No hay conexion con el servidor", Toast.LENGTH_LONG).show();
+                    u.setApellido(u.getApellido().substring(0,u.getApellido().length()-1));
                 }
             }
         }else{

@@ -25,9 +25,7 @@ public class MiAdaptadorBotones extends RecyclerView.Adapter<MiAdaptadorBotones.
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-
         Button nombre;
-
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             nombre = itemView.findViewById(R.id.buttonSeleccionable);

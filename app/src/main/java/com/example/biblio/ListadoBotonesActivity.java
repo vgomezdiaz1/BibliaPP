@@ -12,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.biblio.clases.Autor;
 import com.example.biblio.clases.Libro;
@@ -53,14 +54,17 @@ public class ListadoBotonesActivity extends AppCompatActivity {
             PeticionLibros pl = new PeticionLibros(men, u,libros);
             pl.start();
             try {
-                System.out.println("pido libros");
                 pl.join();
             }catch(Exception e){
                 e.printStackTrace();
             }
-            guardarDatosLibros(libros);
-            guardarDatosAutores(libros, autores);
-            guardarDatosTematicas(libros);
+            if(libros.size() == 0){
+                Toast.makeText(this, "No hay conexión con el servidor", Toast.LENGTH_SHORT).show();
+            }else{
+                guardarDatosLibros(libros);
+                guardarDatosAutores(libros, autores);
+                guardarDatosTematicas(libros);
+            }
         }
         ArrayList<String> nombres = new ArrayList<>();
         nombres.add("Lo he Leido");

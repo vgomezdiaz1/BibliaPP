@@ -49,12 +49,15 @@ public class NuevoUsuarioActivity extends AppCompatActivity {
                 p.join();
             }catch(Exception ex){
                 ex.printStackTrace();
-            }
-            if(u.getId()!=0){
+            }if(u.getId()==-5) {
+                Toast.makeText(this, "No hay conexión con el servidor", Toast.LENGTH_SHORT).show();
+                u = new Usuario();
+            }else if(u.getId()!=0){
                 Toast.makeText(this, "Usuario creado", Toast.LENGTH_SHORT).show();
                 finish();
             }else{
                 Toast.makeText(this, "Error al crear usuario", Toast.LENGTH_SHORT).show();
+                u = new Usuario();
             }
         }
     }

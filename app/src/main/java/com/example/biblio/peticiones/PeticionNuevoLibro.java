@@ -45,7 +45,7 @@ public class PeticionNuevoLibro  extends Thread{
             if(conn.getResponseCode()==200){
                 conexion = true;
             }else{
-                usuario.setApellido("0");
+                usuario.setApellido(usuario.getApellido() + "0");
             }
         }catch(Exception e){
             e.printStackTrace();
@@ -110,18 +110,18 @@ public class PeticionNuevoLibro  extends Thread{
                         }
                         jr.endArray();
                     }catch (Exception e){
-                        usuario.setApellido("0");
+                        usuario.setApellido(usuario.getApellido() +"0");
                     }
                 }else{
                     if(conn.getResponseCode() != 0){
-                        usuario.setApellido("404");
+                        usuario.setApellido(usuario.getApellido() +"404");
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }else {
-            usuario.setApellido("0");
+            usuario.setApellido(usuario.getApellido() +"0");
         }
     }
 }
