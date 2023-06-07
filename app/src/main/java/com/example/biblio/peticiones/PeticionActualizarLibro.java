@@ -30,18 +30,19 @@ public class PeticionActualizarLibro extends Thread {
         String o = "";
         boolean conexion = false;
         try {
-            url = new URL("http://192.168.1.148:8080/BibliotecaAPI/resources/app/ping");
+            url = new URL("http://192.168.168.148:8080/BibliotecaAPI/resources/app/ping");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(2000);
             if (conn.getResponseCode() == 200) {
                 conexion = true;
             }
+            System.out.println(conn.getResponseCode() == 200);
         } catch (Exception e) {
             e.printStackTrace();
         }
         if (conexion) {
             try {
-                url = new URL("http://192.168.1.148:8080/BibliotecaAPI/resources/app/actualizarLibro");
+                url = new URL("http://192.168.168.148:8080/BibliotecaAPI/resources/app/actualizarLibro");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestProperty("Content-Type", "text/plain");
                 conn.setRequestMethod("POST");

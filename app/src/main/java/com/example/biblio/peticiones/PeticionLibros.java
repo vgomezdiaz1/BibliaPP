@@ -35,7 +35,7 @@ public class PeticionLibros extends Thread{
         URL url = null;
         boolean conexion = false;
         try {
-            url = new URL("http://192.168.1.148:8080/BibliotecaAPI/resources/app/ping");
+            url = new URL("http://192.168.168.148:8080/BibliotecaAPI/resources/app/ping");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(2000);
             if (conn.getResponseCode() == 200) {
@@ -46,7 +46,7 @@ public class PeticionLibros extends Thread{
         }
         if (conexion) {
             try {
-                url = new URL("http://192.168.1.148:8080/BibliotecaAPI/resources/app/librosByUsuario");
+                url = new URL("http://192.168.168.148:8080/BibliotecaAPI/resources/app/librosByUsuario");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestProperty("Content-Type", "text/plain");
                 conn.setRequestProperty("Accept", "application/json");
