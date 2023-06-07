@@ -8,18 +8,19 @@
 
     <Button
         android:id="@+id/buttonSeleccionable"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="140dp"
-        android:background="@drawable/boton_basico_removebg_preview__1_"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/sin_t_tulo"
         android:fallbackLineSpacing="false"
         android:hapticFeedbackEnabled="false"
         android:textAlignment="textEnd"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
-        app:icon="@mipmap/ic_launcher_round"
-        app:iconPadding="20dp"
         app:iconSize="80dp"
         app:iconTint="@color/material_on_background_disabled"
         app:iconTintMode="add" />
+
 </LinearLayout>

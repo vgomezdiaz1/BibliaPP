@@ -1,6 +1,8 @@
 package com.example.biblio;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.biblio.clases.Libro;
@@ -19,9 +22,11 @@ import java.util.ArrayList;
 public class MiAdaptadorBotones extends RecyclerView.Adapter<MiAdaptadorBotones.MyViewHolder> {
 
     ArrayList<String> nombres;
+    Context context;
 
-    public MiAdaptadorBotones(ArrayList<String> nombres) {
+    public MiAdaptadorBotones(Context context, ArrayList<String> nombres) {
         this.nombres = nombres;
+        this.context = context;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -33,11 +38,11 @@ public class MiAdaptadorBotones extends RecyclerView.Adapter<MiAdaptadorBotones.
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(itemView.getContext(),ListadoLibrosActivity.class);
-                    if(nombre.getText().equals("Lo he Leido")){
+                    if(nombre.getText().equals("Leido")){
                         i.putExtra("Leido",1);
-                    }else if(nombre.getText().equals("Lo tengo")){
+                    }else if(nombre.getText().equals("Biblioteca")){
                         i.putExtra("Posesion",1);
-                    }else if(nombre.getText().equals("Lo quiero")){
+                    }else if(nombre.getText().equals("Deseado")){
                         i.putExtra("Deseado",1);
                     }else if(nombre.getText().equals("Mis Favoritos")){
                         i.putExtra("Favorito",1);
@@ -62,7 +67,24 @@ public class MiAdaptadorBotones extends RecyclerView.Adapter<MiAdaptadorBotones.
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+        Drawable icon = null;
+        if(position==0){
+            icon =  context.getResources().getDrawable(R.drawable.libreria);
+        }else if(position==1){
+            icon =  context.getResources().getDrawable(R.drawable.leido);
+        }else if(position==2){
+            icon =  context.getResources().getDrawable(R.drawable.deseado);
+        }else{
+            icon =  context.getResources().getDrawable(R.drawable.estrellafavoritos);
+        }
+        int width = 200;
+        int height = 200;
+
+        icon = DrawableCompat.wrap(icon);
+        icon.setBounds(0, 0, width, height);
         holder.nombre.setText(nombres.get(position));
+        holder.nombre.setCompoundDrawables(icon, null, null, null);
+        holder.nombre.invalidate();
     }
 
     @Override

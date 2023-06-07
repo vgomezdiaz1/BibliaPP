@@ -67,9 +67,9 @@ public class ListadoBotonesActivity extends AppCompatActivity {
             }
         }
         ArrayList<String> nombres = new ArrayList<>();
-        nombres.add("Lo he Leido");
-        nombres.add("Lo tengo");
-        nombres.add("Lo quiero");
+        nombres.add("Biblioteca");
+        nombres.add("Leido");
+        nombres.add("Deseado");
         nombres.add("Mis Favoritos");
         RecyclerView rv = findViewById(R.id.listaBusquedaButton);
         rv.setHasFixedSize(true);
@@ -77,7 +77,7 @@ public class ListadoBotonesActivity extends AppCompatActivity {
         RecyclerView.LayoutManager lm = new LinearLayoutManager(this);
         rv.setLayoutManager(lm);
 
-        MiAdaptadorBotones adaptador = new MiAdaptadorBotones(nombres);
+        MiAdaptadorBotones adaptador = new MiAdaptadorBotones(this,nombres);
         rv.setAdapter(adaptador);
     }
 

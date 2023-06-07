@@ -139,7 +139,7 @@ public class ListadoLibrosActivity extends AppCompatActivity {
             toolbar.setTitle("Leido por " + u.getUsername());
             sql += " where l.leido = 1 ";
         }else if(iposesion.equals("1")){
-            toolbar.setTitle("Posesion de " + u.getUsername() );
+            toolbar.setTitle("Biblioteca de " + u.getUsername() );
             sql += " where l.en_posesion = 1 ";
         }else if(ideseado.equals("1")){
             toolbar.setTitle("Deseado por " + u.getUsername());
