@@ -70,10 +70,7 @@ public class BusquedaActivity extends AppCompatActivity {
 
         selectorautores.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
-                    public void onItemSelected(AdapterView<?> spn,
-                                               View v,
-                                               int posicion,
-                                               long id) {
+                    public void onItemSelected(AdapterView<?> spn,View v,int posicion,long id) {
                         buscarLibros();
                     }
                     public void onNothingSelected(AdapterView<?> spn) {
@@ -81,21 +78,14 @@ public class BusquedaActivity extends AppCompatActivity {
                 });
         selectortematicas.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
-                    public void onItemSelected(AdapterView<?> spn,
-                                               View v,
-                                               int posicion,
-                                               long id) {
+                    public void onItemSelected(AdapterView<?> spn,View v,int posicion,long id) {
                         buscarLibros();
                     }
                     public void onNothingSelected(AdapterView<?> spn) {
                     }
                 });
-        selectorBooleanos.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    public void onItemSelected(AdapterView<?> spn,
-                                               View v,
-                                               int posicion,
-                                               long id) {
+        selectorBooleanos.setOnItemSelectedListener( new AdapterView.OnItemSelectedListener() {
+                    public void onItemSelected(AdapterView<?> spn, View v,int posicion,long id) {
                         buscarLibros();
                     }
                     public void onNothingSelected(AdapterView<?> spn) {
