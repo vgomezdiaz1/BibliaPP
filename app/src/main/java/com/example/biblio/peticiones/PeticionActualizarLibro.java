@@ -60,10 +60,10 @@ public class PeticionActualizarLibro extends Thread {
                         while ((line = bufferedReader.readLine()) != null)
                             o += line;
                     }
-                    usuarioLibro.getUsuario().setId(-5);
+                    usuarioLibro.getUsuario().setApellido("ok");
                     in.close();
                 } else {
-
+                    usuarioLibro.getUsuario().setApellido("ko");
                 }
             } catch (java.net.SocketTimeoutException e) {
                 e.printStackTrace();

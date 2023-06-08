@@ -150,7 +150,7 @@ public class InformacionLibroActivity extends AppCompatActivity implements Lifec
         p1.start();
         try {
             p1.join();
-            if(ul.getUsuario().getId() == -5){
+            if(ul.getUsuario().getApellido().equals("ok")){
                 ContentValues cv = new ContentValues();
                 cv.put("en_posesion", this.en_posesion.isChecked());
                 cv.put("deseado", this.deseado.isChecked());
