@@ -1,36 +1,28 @@
 package com.example.biblio.peticiones;
 
 import android.util.JsonReader;
-import android.util.Log;
 
-import com.example.biblio.R;
-import com.example.biblio.clases.Libro;
 import com.example.biblio.clases.Mensaje;
 import com.example.biblio.clases.Usuario;
 
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 
 public class PeticionInicioSesion extends Thread{
 
-    Mensaje men;
+    Mensaje mensaje;
     Usuario usuario;
 
     public PeticionInicioSesion(Mensaje men,Usuario usuario){
         this.usuario = usuario;
-        this.men = men;
+        this.mensaje = men;
     }
 
     @Override
@@ -58,7 +50,7 @@ public class PeticionInicioSesion extends Thread{
                 conn.setRequestProperty("Accept", "application/json");
                 conn.setRequestMethod("POST");
                 try (OutputStream os = conn.getOutputStream()) {
-                    byte[] input = men.codificarMensaje(usuario.toStringInicioSesion()).getBytes("utf-8");
+                    byte[] input = mensaje.codificarMensaje(usuario.toStringInicioSesion()).getBytes("utf-8");
                     os.write(input, 0, input.length);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -85,13 +77,11 @@ public class PeticionInicioSesion extends Thread{
                         }
                     }
                     try {
-                        devolucion = men.decodificarMensaje(devolucion);
+                        devolucion = mensaje.decodificarMensaje(devolucion);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    System.out.println(devolucion);
                     devolucion = devolucion.substring(7);
-                    System.out.println(devolucion);
                     byte[] bytes = devolucion.getBytes(StandardCharsets.UTF_8);
                     ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
                     InputStreamReader isrd = new InputStreamReader(bais, StandardCharsets.UTF_8);
@@ -115,7 +105,6 @@ public class PeticionInicioSesion extends Thread{
                         }
                     }
                 } else {
-                    System.out.println("respuesta " + conn.getResponseCode());
                 }
             } catch (IOException e) {
                 this.usuario.setId(-1);

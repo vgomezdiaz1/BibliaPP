@@ -7,7 +7,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -17,10 +16,8 @@ import android.view.MenuItem;
 
 import com.example.biblio.clases.Autor;
 import com.example.biblio.clases.Libro;
-import com.example.biblio.clases.Mensaje;
 import com.example.biblio.clases.Tematica;
 import com.example.biblio.clases.Usuario;
-import com.example.biblio.peticiones.PeticionLibros;
 
 import java.util.ArrayList;
 
@@ -29,7 +26,7 @@ public class ListadoLibrosActivity extends AppCompatActivity {
     ArrayList<Libro> libros = new ArrayList<>();
     ArrayList<Autor> autores = new ArrayList<>();
     ArrayList<Tematica> tematicas = new ArrayList<>();
-    Usuario u;
+    Usuario usuario;
     Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,12 +103,12 @@ public class ListadoLibrosActivity extends AppCompatActivity {
 
     public void addLibro(){
         Intent i = new Intent(this, AddLibroActivity.class);
-        i.putExtra("id", u.getId());
-        i.putExtra("username", u.getUsername());
-        i.putExtra("nombre", u.getNombre());
-        i.putExtra("mail", u.getMail());
-        i.putExtra("apellido", u.getApellido());
-        i.putExtra("contrasenya", u.getContrasenya());
+        i.putExtra("id", usuario.getId());
+        i.putExtra("username", usuario.getUsername());
+        i.putExtra("nombre", usuario.getNombre());
+        i.putExtra("mail", usuario.getMail());
+        i.putExtra("apellido", usuario.getApellido());
+        i.putExtra("contrasenya", usuario.getContrasenya());
         i.putExtra("iniciado",false);
         startActivity(i);
     }
@@ -136,16 +133,16 @@ public class ListadoLibrosActivity extends AppCompatActivity {
         String sql = "select l.id, l.isbn, l.titulo, l.sinopsis, l.hojas, l.id_portada, l.url," +
                 " l.en_posesion, l.deseado, l.leido, l.favorito, l.id_autor from libro l";
         if(ileido.equals("1")){
-            toolbar.setTitle("Leido por " + u.getUsername());
+            toolbar.setTitle("Leido por " + usuario.getUsername());
             sql += " where l.leido = 1 ";
         }else if(iposesion.equals("1")){
-            toolbar.setTitle("Biblioteca de " + u.getUsername() );
+            toolbar.setTitle("Biblioteca de " + usuario.getUsername() );
             sql += " where l.en_posesion = 1 ";
         }else if(ideseado.equals("1")){
-            toolbar.setTitle("Deseado por " + u.getUsername());
+            toolbar.setTitle("Deseado por " + usuario.getUsername());
             sql += " where l.deseado = 1 ";
         }else if(ifavorito.equals("1")){
-            toolbar.setTitle("Fav de " + u.getUsername());
+            toolbar.setTitle("Fav de " + usuario.getUsername());
             sql += " where l.favorito = 1 ";
         }
         cursor = myDB.rawQuery(sql , null);
@@ -200,7 +197,7 @@ public class ListadoLibrosActivity extends AppCompatActivity {
             String mail = cursor.getString(3);
             String apellido = cursor.getString(4);
             String contrasenya = cursor.getString(5);
-            this.u = new Usuario(id,username,nombre,mail,apellido,contrasenya);
+            this.usuario = new Usuario(id,username,nombre,mail,apellido,contrasenya);
         }
         cursor.close();
         myDB.close();

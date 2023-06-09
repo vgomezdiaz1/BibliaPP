@@ -97,33 +97,33 @@ public class MainActivity extends AppCompatActivity {
         TextView nombre = findViewById(R.id.editTextUsuario);
         TextView contra = findViewById(R.id.editTextContrasenya);
 
-        Usuario u = new Usuario(nombre.getText().toString(), contra.getText().toString());
-        Mensaje men = null;
+        Usuario usuario = new Usuario(nombre.getText().toString(), contra.getText().toString());
+        Mensaje mensaje = null;
         try{
-            men  = new Mensaje(this);
+            mensaje  = new Mensaje(this);
         }catch(Exception e){
             e.printStackTrace();
         }
-        PeticionInicioSesion p = new PeticionInicioSesion(men,u);
+        PeticionInicioSesion p = new PeticionInicioSesion(mensaje,usuario);
         p.start();
         try {
             p.join(8000);
         }catch(Exception e){
             e.printStackTrace();
         }
-        if(u.getId()== 0){
+        if(usuario.getId()== 0){
             Toast.makeText(this, "No hay conexion con el servidor", Toast.LENGTH_SHORT).show();
-        }else if(u.getId()== -1){
+        }else if(usuario.getId()== -1){
             Toast.makeText(this, "Usuario o contraseña incorrecta", Toast.LENGTH_SHORT).show();
         }else{
-            guardarUsuario(u);
+            guardarUsuario(usuario);
             Intent i = new Intent(this, ListadoBotonesActivity.class);
-            i.putExtra("id", u.getId());
-            i.putExtra("username", u.getUsername());
-            i.putExtra("nombre", u.getNombre());
-            i.putExtra("mail", u.getMail());
-            i.putExtra("apellido", u.getApellido());
-            i.putExtra("contrasenya", u.getContrasenya());
+            i.putExtra("id", usuario.getId());
+            i.putExtra("username", usuario.getUsername());
+            i.putExtra("nombre", usuario.getNombre());
+            i.putExtra("mail", usuario.getMail());
+            i.putExtra("apellido", usuario.getApellido());
+            i.putExtra("contrasenya", usuario.getContrasenya());
             i.putExtra("iniciado",false);
             i.putExtra("seleccionarLibro",false);
             startActivity(i);

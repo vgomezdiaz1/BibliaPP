@@ -29,7 +29,7 @@ public class ListadoBotonesActivity extends AppCompatActivity {
     ArrayList<Libro> librosEnPosesion = new ArrayList<>();
     ArrayList<Autor> autores = new ArrayList<>();
     ArrayList<Tematica> tematicas = new ArrayList<>();
-    Usuario u;
+    Usuario usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,18 +40,18 @@ public class ListadoBotonesActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(0xffffffff);
         setSupportActionBar(toolbar);
         Intent i = getIntent();
-        this.u = new Usuario(i.getIntExtra("id",0),i.getStringExtra("username"), i.getStringExtra("mail")
+        this.usuario = new Usuario(i.getIntExtra("id",0),i.getStringExtra("username"), i.getStringExtra("mail")
                 , i.getStringExtra("nombre"),i.getStringExtra("apellido"),i.getStringExtra("contrasenya"));
         if(i.getBooleanExtra("iniciado",false)){
             cargarLibros(i);
             librosEnPosesion();
         }else{
-            Mensaje men = null;
+            Mensaje mensaje = null;
             try {
-                men = new Mensaje(this);
+                mensaje = new Mensaje(this);
             } catch (Exception e) {
             }
-            PeticionLibros pl = new PeticionLibros(men, u,libros);
+            PeticionLibros pl = new PeticionLibros(mensaje, usuario,libros);
             pl.start();
             try {
                 pl.join();
@@ -191,12 +191,12 @@ public class ListadoBotonesActivity extends AppCompatActivity {
 
     public void addLibro(){
         Intent i = new Intent(this, AddLibroActivity.class);
-        i.putExtra("id", u.getId());
-        i.putExtra("username", u.getUsername());
-        i.putExtra("nombre", u.getNombre());
-        i.putExtra("mail", u.getMail());
-        i.putExtra("apellido", u.getApellido());
-        i.putExtra("contrasenya", u.getContrasenya());
+        i.putExtra("id", usuario.getId());
+        i.putExtra("username", usuario.getUsername());
+        i.putExtra("nombre", usuario.getNombre());
+        i.putExtra("mail", usuario.getMail());
+        i.putExtra("apellido", usuario.getApellido());
+        i.putExtra("contrasenya", usuario.getContrasenya());
         i.putExtra("iniciado",false);
         startActivity(i);
     }

@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,7 +19,6 @@ import com.example.biblio.clases.Mensaje;
 import com.example.biblio.clases.Tematica;
 import com.example.biblio.clases.Usuario;
 import com.example.biblio.databinding.ActivityAddLibroBinding;
-import com.example.biblio.databinding.ActivityMainBinding;
 import com.example.biblio.peticiones.PeticionNuevoLibro;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
@@ -29,7 +27,7 @@ import java.util.ArrayList;
 
 public class AddLibroActivity extends AppCompatActivity{
 
-    Usuario u;
+    Usuario usuario;
     ArrayList<Libro> libro = new ArrayList<>();
 
     ActivityAddLibroBinding bindign;
@@ -47,7 +45,7 @@ public class AddLibroActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_libro);
         Intent i = getIntent();
-        this.u = new Usuario(i.getIntExtra("id",0),i.getStringExtra("username"), i.getStringExtra("mail")
+        this.usuario = new Usuario(i.getIntExtra("id",0),i.getStringExtra("username"), i.getStringExtra("mail")
                 , i.getStringExtra("nombre"),i.getStringExtra("apellido"),i.getStringExtra("contrasenya"));
         bindign = ActivityAddLibroBinding.inflate(getLayoutInflater());
         setContentView(bindign.getRoot());
@@ -71,12 +69,12 @@ public class AddLibroActivity extends AppCompatActivity{
             if(idLibroBuscado != 0){
                 Intent i = new Intent(this, ListadoLibrosActivity.class);
                 i.putExtra("idLibro", idLibroBuscado);
-                i.putExtra("id", u.getId());
-                i.putExtra("username", u.getUsername());
-                i.putExtra("nombre", u.getNombre());
-                i.putExtra("mail", u.getMail());
-                i.putExtra("apellido", u.getApellido());
-                i.putExtra("contrasenya", u.getContrasenya());
+                i.putExtra("id", usuario.getId());
+                i.putExtra("username", usuario.getUsername());
+                i.putExtra("nombre", usuario.getNombre());
+                i.putExtra("mail", usuario.getMail());
+                i.putExtra("apellido", usuario.getApellido());
+                i.putExtra("contrasenya", usuario.getContrasenya());
                 i.putExtra("iniciado",true);
                 i.putExtra("seleccionarLibro", true);
                 i.putExtra("idNuevo", idLibroBuscado + "");
@@ -85,7 +83,7 @@ public class AddLibroActivity extends AppCompatActivity{
             }else{
                 try{
                     men  = new Mensaje(this);
-                    PeticionNuevoLibro p1 = new PeticionNuevoLibro(men, u, isbn, libro);
+                    PeticionNuevoLibro p1 = new PeticionNuevoLibro(men, usuario, isbn, libro);
                     p1.start();
                     p1.join();
                 }catch(Exception e){
@@ -98,23 +96,23 @@ public class AddLibroActivity extends AppCompatActivity{
                     Toast.makeText(this.getBaseContext(), "Libro guardado", Toast.LENGTH_LONG).show();
                     Intent i = new Intent(this, ListadoLibrosActivity.class);
                     i.putExtra("idLibro", libro.get(0).getId());
-                    i.putExtra("id", u.getId());
-                    i.putExtra("username", u.getUsername());
-                    i.putExtra("nombre", u.getNombre());
-                    i.putExtra("mail", u.getMail());
-                    i.putExtra("apellido", u.getApellido());
-                    i.putExtra("contrasenya", u.getContrasenya());
+                    i.putExtra("id", usuario.getId());
+                    i.putExtra("username", usuario.getUsername());
+                    i.putExtra("nombre", usuario.getNombre());
+                    i.putExtra("mail", usuario.getMail());
+                    i.putExtra("apellido", usuario.getApellido());
+                    i.putExtra("contrasenya", usuario.getContrasenya());
                     i.putExtra("iniciado",true);
                     i.putExtra("seleccionarLibro", true);
                     i.putExtra("idNuevo", libro.get(0).getId() + "");
                     startActivity(i);
                     finish();
-                }else if(u.getApellido().equals("404")){
+                }else if(usuario.getApellido().equals("404")){
                     Toast.makeText(this, "El ISBN no existe en la base de datos", Toast.LENGTH_LONG).show();
-                    u.setApellido(u.getApellido().substring(0,u.getApellido().length()-3));
+                    usuario.setApellido(usuario.getApellido().substring(0, usuario.getApellido().length()-3));
                 }else{
                     Toast.makeText(this, "No hay conexion con el servidor", Toast.LENGTH_LONG).show();
-                    u.setApellido(u.getApellido().substring(0,u.getApellido().length()-1));
+                    usuario.setApellido(usuario.getApellido().substring(0, usuario.getApellido().length()-1));
                 }
             }
         }else{

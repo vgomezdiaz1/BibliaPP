@@ -30,7 +30,7 @@ public class NuevoUsuarioActivity extends AppCompatActivity {
         String email = e.getText().toString();
         String contra1 = c1.getText().toString();
         String contra2 = c2.getText().toString();
-        Usuario u;
+        Usuario usuario = null;
         if(nombre.equals("") || apellido.equals("") || email.equals("") || contra1.equals("") || contra2.equals("")){
             Toast.makeText(this, "Todos los campos deben estar completados", Toast.LENGTH_SHORT).show();
         }else if(!contra1.equals(contra2)){
@@ -42,22 +42,20 @@ public class NuevoUsuarioActivity extends AppCompatActivity {
             }catch(Exception ex){
                 ex.printStackTrace();
             }
-            u = new Usuario(email, nombre, apellido, contra1);
-            PeticionNuevoUsuario p = new PeticionNuevoUsuario(men,u);
+            usuario = new Usuario(email, nombre, apellido, contra1);
+            PeticionNuevoUsuario p = new PeticionNuevoUsuario(men,usuario);
             p.start();
             try {
                 p.join();
             }catch(Exception ex){
                 ex.printStackTrace();
-            }if(u.getId()==-5) {
+            }if(usuario.getId()==-5) {
                 Toast.makeText(this, "No hay conexión con el servidor", Toast.LENGTH_SHORT).show();
-                u = new Usuario();
-            }else if(u.getId()!=0){
+            }else if(usuario.getId()!=0){
                 Toast.makeText(this, "Usuario creado", Toast.LENGTH_SHORT).show();
                 finish();
             }else{
                 Toast.makeText(this, "Error al crear usuario", Toast.LENGTH_SHORT).show();
-                u = new Usuario();
             }
         }
     }
